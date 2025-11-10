@@ -1,0 +1,476 @@
+---
+title: "Segment Rules Reference"
+description: "Complete reference for segment rules, fields, and operators"
+---
+
+## Rules Overview
+
+Segment rules determine which leads belong to a segment. Each rule consists of:
+- **Field**: What to check
+- **Operator**: How to compare
+- **Value**: What to compare against
+
+Leads must match ALL rules to be included in the segment.
+
+## Standard Fields
+
+### Source
+
+Where the lead came from.
+
+**Operators:**
+- Equals
+- Not Equals
+- Contains
+- Not Contains
+
+**Example:**
+- Field: Source
+- Operator: Equals
+- Value: "Campaign A"
+
+### Group Name
+
+Telegram group or channel name.
+
+**Operators:**
+- Equals
+- Not Equals
+- Contains
+- Not Contains
+
+**Example:**
+- Field: Group Name
+- Operator: Contains
+- Value: "Telegram"
+
+### Status
+
+Lead status (Active, Blocked, Archived).
+
+**Operators:**
+- Equals
+- Not Equals
+- In (multiple values)
+- Not In (multiple values)
+
+**Example:**
+- Field: Status
+- Operator: Equals
+- Value: "Active"
+
+### Priority
+
+Lead priority level.
+
+**Operators:**
+- Equals
+- Not Equals
+- In (multiple values)
+- Not In (multiple values)
+
+**Example:**
+- Field: Priority
+- Operator: Equals
+- Value: "High"
+
+### Tags
+
+Lead tags.
+
+**Operators:**
+- Contains
+- Not Contains
+- In (multiple tags)
+- Not In (multiple tags)
+
+**Example:**
+- Field: Tags
+- Operator: Contains
+- Value: "VIP"
+
+### Country
+
+Lead country code.
+
+**Operators:**
+- Equals
+- Not Equals
+- Contains
+- Not Contains
+- In (multiple countries)
+- Not In (multiple countries)
+
+**Example:**
+- Field: Country
+- Operator: Equals
+- Value: "US"
+
+### Language
+
+Lead language preference.
+
+**Operators:**
+- Equals
+- Not Equals
+- Contains
+- Not Contains
+- In (multiple languages)
+- Not In (multiple languages)
+
+**Example:**
+- Field: Language
+- Operator: Equals
+- Value: "en"
+
+## Campaign Fields
+
+### Campaign Participation
+
+Whether lead participated in specific campaigns.
+
+**Operators:**
+- Participated in
+- Did not participate in
+- Participated in any of (multiple campaigns)
+- Did not participate in any of (multiple campaigns)
+
+**Example:**
+- Field: Campaign Participation
+- Operator: Participated in
+- Value: [Select Campaign]
+
+<Note>
+  Screenshot placeholder: Add a screenshot showing campaign selection in rules
+</Note>
+
+### Campaign Exclusion
+
+Exclude leads who participated in campaigns.
+
+**Operators:**
+- Did not participate in
+- Participated in
+- Did not participate in any of (multiple campaigns)
+- Participated in any of (multiple campaigns)
+
+**Example:**
+- Field: Campaign Exclusion
+- Operator: Did not participate in
+- Value: [Select Campaign]
+
+### Campaign Response
+
+Whether lead responded to campaign messages.
+
+**Operators:**
+- Responded to
+- Did not respond to
+- Responded to any of (multiple campaigns)
+- Did not respond to any of (multiple campaigns)
+
+**Example:**
+- Field: Campaign Response
+- Operator: Responded to
+- Value: [Select Campaign]
+
+## Date Fields
+
+### Created Date
+
+When the lead was created.
+
+**Operators:**
+- Created After
+- Created Before
+- Created Between
+- Created On
+
+**Example:**
+- Field: Created Date
+- Operator: Created After
+- Value: "2024-01-01"
+
+**Between Example:**
+- Field: Created Date
+- Operator: Created Between
+- Value: "2024-01-01"
+- Value 2: "2024-12-31"
+
+### Last Contact
+
+Last time the lead was contacted.
+
+**Operators:**
+- Contacted After
+- Contacted Before
+- Contacted Between
+- Contacted On
+
+**Example:**
+- Field: Last Contact
+- Operator: Contacted Before
+- Value: "2024-12-31"
+
+## Custom Field Rules
+
+Custom fields support operators based on their type.
+
+### Text Fields
+
+**Operators:**
+- Equals
+- Not Equals
+- Contains
+- Not Contains
+
+**Example:**
+- Field: Custom Field "Company"
+- Operator: Contains
+- Value: "Tech"
+
+### Number Fields
+
+**Operators:**
+- Equals
+- Not Equals
+- Greater Than
+- Less Than
+- Between
+
+**Example:**
+- Field: Custom Field "Revenue"
+- Operator: Greater Than
+- Value: "100000"
+
+**Between Example:**
+- Field: Custom Field "Age"
+- Operator: Between
+- Value: "18"
+- Value 2: "65"
+
+### Date Fields
+
+**Operators:**
+- After
+- Before
+- Between
+- On
+
+**Example:**
+- Field: Custom Field "Sign-up Date"
+- Operator: After
+- Value: "2024-01-01"
+
+### Boolean/Checkbox Fields
+
+**Operators:**
+- Is
+- Is Not
+
+**Values:**
+- Yes (true)
+- No (false)
+
+**Example:**
+- Field: Custom Field "Newsletter"
+- Operator: Is
+- Value: "Yes"
+
+### Dropdown Fields
+
+**Operators:**
+- Is
+- Is Not
+- In (multiple values)
+- Not In (multiple values)
+
+**Example:**
+- Field: Custom Field "Industry"
+- Operator: Is
+- Value: "Software"
+
+**Multiple Values Example:**
+- Field: Custom Field "Industry"
+- Operator: In
+- Value: "Software, Technology, IT"
+
+### Multiselect Fields
+
+**Operators:**
+- Contains
+- Not Contains
+- In (multiple values)
+- Not In (multiple values)
+
+**Example:**
+- Field: Custom Field "Interests"
+- Operator: Contains
+- Value: "Technology"
+
+## Operator Reference
+
+### Text Operators
+
+**Equals:**
+- Exact match
+- Case-sensitive
+- Full value match
+
+**Not Equals:**
+- Exclude exact matches
+- Case-sensitive
+- Full value match
+
+**Contains:**
+- Partial match
+- Case-insensitive
+- Finds substring
+
+**Not Contains:**
+- Exclude partial matches
+- Case-insensitive
+- Excludes substring
+
+### Number Operators
+
+**Equals:**
+- Exact numeric match
+- Supports decimals
+
+**Not Equals:**
+- Exclude exact matches
+
+**Greater Than:**
+- Values larger than specified
+- Excludes equal values
+
+**Less Than:**
+- Values smaller than specified
+- Excludes equal values
+
+**Between:**
+- Values within range
+- Includes both endpoints
+- Requires two values
+
+### Date Operators
+
+**After:**
+- Dates after specified date
+- Excludes equal dates
+
+**Before:**
+- Dates before specified date
+- Excludes equal dates
+
+**Between:**
+- Dates within range
+- Includes both endpoints
+- Requires two values
+
+**On:**
+- Exact date match
+- Includes only specified date
+
+### List Operators
+
+**In:**
+- Value matches any in list
+- Multiple values separated by commas
+- OR logic
+
+**Not In:**
+- Value does not match any in list
+- Multiple values separated by commas
+- Excludes all listed values
+
+## Rule Combinations
+
+### AND Logic
+
+All rules must match:
+- Rule 1: Source equals "Campaign A"
+- Rule 2: Status equals "Active"
+- Result: Leads from Campaign A AND Active
+
+### Multiple Values
+
+Use "In" operator for multiple values:
+- Field: Country
+- Operator: In
+- Value: "US, CA, UK"
+
+### Complex Examples
+
+**High-Value US Leads:**
+- Rule 1: Country equals "US"
+- Rule 2: Custom Field "Revenue" greater than "50000"
+- Rule 3: Status equals "Active"
+
+**Recent Responders:**
+- Rule 1: Campaign Response responded to [Campaign]
+- Rule 2: Last Contact after "2024-01-01"
+- Rule 3: Status equals "Active"
+
+**Exclude Previous Campaign:**
+- Rule 1: Campaign Exclusion did not participate in [Old Campaign]
+- Rule 2: Status equals "Active"
+
+## Best Practices
+
+1. **Start Simple**: Begin with basic rules
+2. **Test Rules**: Verify rules match expected leads
+3. **Use Appropriate Operators**: Match operators to field types
+4. **Combine Carefully**: Multiple rules narrow segments
+5. **Document Rules**: Explain complex rule logic
+6. **Review Regularly**: Update rules as needs change
+
+## Troubleshooting
+
+### Rule Not Matching
+
+If rules don't match expected leads:
+
+1. Check field values match exactly
+2. Verify operator is correct for field type
+3. Check case sensitivity
+4. Review date formats
+5. Test with single rule first
+
+### Segment Too Large
+
+If segment includes too many leads:
+
+1. Add more restrictive rules
+2. Use "Not Equals" or "Not Contains"
+3. Combine with date restrictions
+4. Add custom field filters
+
+### Segment Too Small
+
+If segment includes too few leads:
+
+1. Remove restrictive rules
+2. Use "Contains" instead of "Equals"
+3. Use "In" for multiple values
+4. Check rule values are correct
+
+## Related Topics
+
+<Card
+  title="Creating Segments"
+  icon="plus"
+  href="/segments/creating-segments"
+>
+  Learn how to create segments with rules
+</Card>
+
+<Card
+  title="Managing Segments"
+  icon="settings"
+  href="/segments/managing-segments"
+>
+  Learn how to manage and update segments
+</Card>
+

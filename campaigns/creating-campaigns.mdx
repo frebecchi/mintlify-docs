@@ -1,0 +1,233 @@
+---
+title: "Creating Campaigns"
+description: "Step-by-step guide to creating campaigns in Reach"
+---
+
+## Creating a New Campaign
+
+To create a campaign, click the **"Create Campaign"** button from the campaigns page or use the quick action button in the sidebar.
+
+<Note>
+  Screenshot placeholder: Add a screenshot showing the "Create Campaign" button
+</Note>
+
+## Campaign Creation Steps
+
+### Step 1: Basic Information
+
+#### Campaign Name
+
+Enter a descriptive name for your campaign. This name will be displayed in:
+- Campaign list
+- Campaign statistics
+- Deal source tracking
+- Analytics reports
+
+**Best Practices:**
+- Use clear, descriptive names
+- Include date or version if needed
+- Make it easy to identify the campaign's purpose
+
+#### Description
+
+Optionally add a description explaining:
+- Campaign goals
+- Target audience
+- Key messaging points
+- Notes for your team
+
+#### Telegram Account
+
+Select the Telegram account to use for sending messages. You must:
+- Have at least one connected Telegram account
+- Select an account from the dropdown
+- Ensure the account is healthy and connected
+
+<Warning>
+  Campaigns cannot send messages without a selected Telegram account. Make sure your account is connected before creating the campaign.
+</Warning>
+
+### Step 2: Build Your Flow
+
+The campaign flow builder is a visual interface for creating your messaging workflow.
+
+<Note>
+  Screenshot placeholder: Add a screenshot of the flow builder interface
+</Note>
+
+#### Start Node
+
+Every campaign begins with a Start Node that defines:
+
+**Start Type:**
+- **Immediate**: Campaign starts as soon as it's launched
+- **Scheduled**: Campaign starts at a specific date and time
+
+**For Scheduled Campaigns:**
+- **Date**: Select the start date
+- **Time**: Select the start time
+- **Timezone**: Choose the timezone for the scheduled time
+
+<Info>
+  Scheduled times are converted to UTC for storage but displayed in your selected timezone.
+</Info>
+
+#### Adding Nodes
+
+Click the **"+"** button or use the node palette to add:
+
+**Message Node:**
+- Text message content
+- Variable placeholders (e.g., {first_name})
+- Message formatting
+
+**Delay Node:**
+- Wait time between messages
+- Delay duration (minutes, hours, days)
+- Conditional delays
+
+**Condition Node:**
+- Conditional logic based on responses
+- Branch to different paths
+- Response matching rules
+
+**End Node:**
+- Campaign completion point
+- Final actions
+- Completion tracking
+
+#### Connecting Nodes
+
+- Drag from node outputs to node inputs
+- Create sequential flows
+- Add conditional branches
+- Define flow paths
+
+<Note>
+  Screenshot placeholder: Add a GIF showing how to connect nodes in the flow builder
+</Note>
+
+### Step 3: Configure Messages
+
+#### Message Content
+
+For each Message Node, define:
+
+**Message Text:**
+- Plain text messages
+- Variable placeholders
+- Emojis and special characters
+
+**Variables:**
+- `{first_name}`: Lead's first name
+- `{last_name}`: Lead's last name
+- `{username}`: Telegram username
+- `{phone_number}`: Phone number
+- Custom field variables
+
+<Info>
+  Variables are replaced with actual values when messages are sent. If a variable value is missing, it may be left blank or replaced with a default.
+</Info>
+
+#### Message Timing
+
+Configure when messages are sent:
+- **Immediate**: Send right away
+- **Delayed**: Wait specified time after previous message
+- **Scheduled**: Send at specific time
+
+### Step 4: Select Contacts
+
+Choose which contacts receive the campaign:
+
+**Options:**
+- **All Leads**: Send to all leads in your account
+- **Segment**: Send to a specific segment
+- **Manual Selection**: Select individual leads
+- **Custom Filter**: Use advanced filters
+
+<Note>
+  Screenshot placeholder: Add a screenshot showing contact selection options
+</Note>
+
+### Step 5: Review and Save
+
+Before saving, review:
+
+- Campaign name and description
+- Flow configuration
+- Selected contacts
+- Telegram account
+- Start type and schedule
+
+Click **"Save"** to create the campaign as a draft, or **"Save and Launch"** to create and immediately start the campaign.
+
+## Campaign Flow Examples
+
+### Simple Sequence
+
+A basic campaign with sequential messages:
+
+1. **Start Node** → Immediate start
+2. **Message Node** → Welcome message
+3. **Delay Node** → Wait 24 hours
+4. **Message Node** → Follow-up message
+5. **End Node** → Complete
+
+### Conditional Flow
+
+A campaign with conditional branching:
+
+1. **Start Node** → Immediate start
+2. **Message Node** → Initial message
+3. **Condition Node** → Check for response
+   - **If Response**: Go to Response Path
+   - **If No Response**: Go to Follow-up Path
+4. **End Node** → Complete
+
+### Scheduled Campaign
+
+A campaign that starts at a specific time:
+
+1. **Start Node** → Scheduled for specific date/time
+2. **Message Node** → Announcement message
+3. **End Node** → Complete
+
+## Tips for Creating Campaigns
+
+1. **Start Simple**: Begin with basic sequential campaigns before adding complexity
+2. **Test Flow**: Review your flow visually before saving
+3. **Use Variables**: Personalize messages with lead information
+4. **Add Delays**: Space out messages to avoid overwhelming recipients
+5. **Test First**: Create test campaigns with small audiences
+6. **Document**: Add descriptions explaining your campaign strategy
+
+## Common Mistakes to Avoid
+
+1. **Missing Start Node**: Every campaign needs a Start Node
+2. **No Connections**: Ensure nodes are properly connected
+3. **Missing Account**: Don't forget to select a Telegram account
+4. **No Contacts**: Make sure contacts are selected
+5. **Invalid Schedule**: Check scheduled times are in the future
+6. **Complex Flows**: Start simple and add complexity gradually
+
+## Next Steps
+
+After creating your campaign:
+
+<Card
+  title="Managing Campaigns"
+  icon="settings"
+  href="/campaigns/managing-campaigns"
+>
+  Learn how to manage, edit, and optimize your campaigns
+</Card>
+
+<Card
+  title="Campaign Statuses"
+  icon="info-circle"
+  href="/campaigns/campaign-statuses"
+>
+  Understand different campaign statuses and when they apply
+</Card>
+

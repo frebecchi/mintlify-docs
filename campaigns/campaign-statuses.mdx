@@ -1,0 +1,298 @@
+---
+title: "Campaign Statuses"
+description: "Understanding campaign statuses and when they apply"
+---
+
+## Campaign Status Overview
+
+Campaigns in Reach have different statuses that indicate their current state. Understanding these statuses helps you manage your campaigns effectively.
+
+## Status Types
+
+### Draft
+
+**When:** Campaign is created but not yet launched
+
+**Characteristics:**
+- Can be edited freely
+- Not active
+- Not sending messages
+- Can be deleted
+- Can be launched
+
+**Actions Available:**
+- Edit campaign
+- Launch campaign
+- Delete campaign
+- Duplicate campaign
+
+<Note>
+  Screenshot placeholder: Add a screenshot showing a Draft campaign badge
+</Note>
+
+### Active
+
+**When:** Campaign is currently running and sending messages
+
+**Characteristics:**
+- Sending messages to contacts
+- Cannot be edited (must pause first)
+- Shows real-time progress
+- Can be paused or stopped
+
+**Actions Available:**
+- Pause campaign
+- Stop campaign
+- View statistics
+- View progress
+
+<Info>
+  Active campaigns show live progress updates as messages are sent.
+</Info>
+
+### Paused
+
+**When:** Campaign was active but temporarily stopped
+
+**Characteristics:**
+- Not sending new messages
+- Preserves progress
+- Can be resumed
+- Can be edited
+- Can be stopped
+
+**Actions Available:**
+- Resume/Launch campaign
+- Edit campaign
+- Stop campaign
+- Delete campaign
+
+<Note>
+  Pausing preserves all progress. When resumed, the campaign continues from where it left off.
+</Note>
+
+### Completed
+
+**When:** Campaign has finished processing all contacts
+
+**Characteristics:**
+- All messages sent
+- All contacts processed
+- Cannot be restarted
+- Shows final statistics
+- Can be duplicated
+
+**Actions Available:**
+- View statistics
+- Duplicate campaign
+- Delete campaign
+
+<Info>
+  Completed campaigns provide final statistics and can be used as templates for new campaigns.
+</Info>
+
+### Cancelled
+
+**When:** Campaign was stopped before completion
+
+**Characteristics:**
+- Stopped manually
+- May have partially sent messages
+- Cannot be restarted
+- Shows partial statistics
+- Can be duplicated
+
+**Actions Available:**
+- View statistics
+- Duplicate campaign
+- Delete campaign
+
+<Warning>
+  Cancelled campaigns cannot be resumed. If you need to continue, duplicate the campaign and launch the copy.
+</Warning>
+
+### Scheduled
+
+**When:** Campaign is set to start at a specific date and time
+
+**Characteristics:**
+- Waiting to start
+- Can be edited before start time
+- Will automatically become Active at scheduled time
+- Can be cancelled before starting
+
+**Actions Available:**
+- Edit campaign (before start time)
+- Cancel scheduled start
+- View schedule details
+
+<Note>
+  Screenshot placeholder: Add a screenshot showing a Scheduled campaign with schedule details
+</Note>
+
+### Tracking
+
+**When:** Campaign is monitoring responses but not actively sending
+
+**Characteristics:**
+- Monitoring for responses
+- May send follow-up messages based on conditions
+- In a monitoring state
+- Can be stopped
+
+**Actions Available:**
+- Stop campaign
+- View statistics
+- Edit campaign (if allowed)
+
+## Status Transitions
+
+### Normal Flow
+
+```
+Draft → Scheduled → Active → Completed
+                ↓
+            Paused → Active → Completed
+                ↓
+            Cancelled
+```
+
+### Status Change Rules
+
+**To Active:**
+- From: Draft, Paused, Scheduled
+- Requires: Campaign enabled, Telegram account connected, contacts selected
+
+**To Paused:**
+- From: Active
+- Preserves: All progress and state
+
+**To Cancelled:**
+- From: Active, Paused, Scheduled
+- Result: Stops all execution immediately
+
+**To Completed:**
+- From: Active
+- When: All contacts processed, all messages sent
+
+## Status Indicators
+
+### Visual Indicators
+
+Statuses are displayed with color-coded badges:
+
+- **Draft**: Gray/Muted
+- **Active**: Green/Success
+- **Paused**: Yellow/Warning
+- **Completed**: Blue/Primary
+- **Cancelled**: Red/Destructive
+- **Scheduled**: Orange
+- **Tracking**: Blue
+
+<Note>
+  Screenshot placeholder: Add a visual guide showing all status badges
+</Note>
+
+### Status in Campaign List
+
+In the campaign list, status is shown:
+- As a badge next to the campaign name
+- With an enable/disable toggle
+- In the status column (if table view)
+
+## Enable vs Status
+
+### Enabled Campaigns
+
+- Can be launched
+- Can become Active
+- Can execute normally
+
+### Disabled Campaigns
+
+- Cannot be launched
+- Any active executions are cancelled
+- Status may show as "Disabled" regardless of other status
+
+<Info>
+  Disabling a campaign is different from pausing. Disabled campaigns cannot be launched at all.
+</Info>
+
+## Status and Permissions
+
+### Editing Based on Status
+
+**Can Edit:**
+- Draft campaigns
+- Paused campaigns
+- Scheduled campaigns (before start time)
+
+**Cannot Edit:**
+- Active campaigns (must pause first)
+- Completed campaigns
+- Cancelled campaigns
+
+### Organization Permissions
+
+- **Own Campaigns**: Full control over status changes
+- **Other's Campaigns**: View only (unless admin/owner)
+- **Admin/Owner**: Can view all campaigns but editing depends on status
+
+## Troubleshooting Status Issues
+
+### Campaign Stuck in Active
+
+If a campaign appears stuck in Active status:
+
+1. Check if messages are actually being sent
+2. Review campaign statistics
+3. Check Telegram account health
+4. Try pausing and resuming
+5. Contact support if needed
+
+### Cannot Change Status
+
+If you cannot change a campaign status:
+
+1. Verify you have permission (must be creator or admin/owner)
+2. Check if campaign is enabled
+3. Ensure Telegram account is connected
+4. Try refreshing the page
+5. Check for system notifications
+
+### Status Not Updating
+
+If status doesn't update as expected:
+
+1. Refresh the page
+2. Check network connection
+3. Wait a few moments for status to sync
+4. Review campaign logs if available
+5. Contact support if issue persists
+
+## Best Practices
+
+1. **Monitor Status**: Regularly check campaign statuses
+2. **Use Pause**: Pause instead of stopping when you need to temporarily halt
+3. **Plan Schedules**: Use scheduled status for planned campaigns
+4. **Track Completion**: Monitor campaigns approaching completion
+5. **Document Changes**: Note why status changes were made
+
+## Related Topics
+
+<Card
+  title="Managing Campaigns"
+  icon="settings"
+  href="/campaigns/managing-campaigns"
+>
+  Learn how to manage campaigns and change statuses
+</Card>
+
+<Card
+  title="Creating Campaigns"
+  icon="plus"
+  href="/campaigns/creating-campaigns"
+>
+  Understand how campaigns start in Draft status
+</Card>
+

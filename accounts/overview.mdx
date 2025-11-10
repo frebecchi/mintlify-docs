@@ -1,0 +1,245 @@
+---
+title: "Telegram Accounts Overview"
+description: "Connect and manage Telegram accounts for sending messages"
+---
+
+## What are Telegram Accounts?
+
+Telegram accounts are the Telegram phone numbers or sessions you connect to Reach to send messages through campaigns. You need at least one connected account to send messages.
+
+<Note>
+  Screenshot placeholder: Add a screenshot showing the accounts list page
+</Note>
+
+## Account Information
+
+### Basic Details
+
+Each account shows:
+- **Phone Number**: Associated phone number
+- **Username**: Telegram username (if available)
+- **Session Name**: Internal session identifier
+- **Profile Picture**: Account profile picture
+- **Status**: Connection status (Connected/Disconnected)
+- **Created Date**: When account was added
+
+### Connection Status
+
+**Connected:**
+- Account is healthy and connected
+- Can send messages
+- Ready for campaigns
+- Green indicator
+
+**Disconnected:**
+- Account is not connected
+- Cannot send messages
+- Needs reconnection
+- Red indicator
+
+**Checking:**
+- Health check in progress
+- Temporary status
+- Updates automatically
+
+## Adding Accounts
+
+### Authentication Methods
+
+You can connect accounts using:
+
+**Phone Authentication:**
+- Enter phone number
+- Receive verification code
+- Enter code to verify
+- Optionally enter 2FA password
+
+**QR Code Authentication:**
+- Generate QR code
+- Scan with Telegram app
+- Automatic authentication
+- Optionally enter 2FA password
+
+<Card
+  title="Adding Accounts"
+  icon="plus"
+  href="/accounts/adding-accounts"
+>
+  Learn how to add Telegram accounts
+</Card>
+
+## Account Health
+
+### Health Checks
+
+Reach automatically checks account health:
+- Regular health monitoring
+- Connection status verification
+- Automatic status updates
+- Health indicators
+
+### Manual Health Check
+
+Test account connection:
+- Click "Test Connection" in account menu
+- Verifies account is working
+- Updates status immediately
+- Shows connection result
+
+### Health Status
+
+**Healthy:**
+- Account is connected
+- Can send messages
+- No issues detected
+
+**Unhealthy:**
+- Account is disconnected
+- Cannot send messages
+- Needs reconnection
+
+## Managing Accounts
+
+### View Accounts
+
+See all connected accounts:
+- Account list with status
+- Search and filter
+- Health indicators
+- Quick actions
+
+### Reconnect Account
+
+If account becomes disconnected:
+1. Click "Reconnect" button
+2. Follow authentication steps
+3. Re-authenticate account
+4. Account reconnects
+
+<Info>
+  Reconnecting preserves account settings but requires re-authentication.
+</Info>
+
+### Delete Account
+
+Remove account from Reach:
+1. Click "Delete" in account menu
+2. Confirm deletion
+3. Account is removed
+4. Cannot send messages from this account
+
+<Warning>
+  Deleting an account removes it from all campaigns using it. Make sure to update campaigns before deleting.
+</Warning>
+
+## Account Limits
+
+### Rate Limits
+
+Telegram enforces rate limits:
+- Messages per day
+- Messages per hour
+- Messages per minute
+- Varies by account age and usage
+
+### Security Limits
+
+Reach provides security features:
+- Rate limiting per account
+- Daily message limits
+- Hourly message limits
+- Account protection
+
+<Card
+  title="Security & Limits"
+  icon="shield"
+  href="/security/overview"
+>
+  Learn about rate limits and security
+</Card>
+
+## Multiple Accounts
+
+### Using Multiple Accounts
+
+You can connect multiple accounts:
+- Distribute message load
+- Use different accounts for different campaigns
+- Backup accounts
+- Organization accounts
+
+### Account Selection
+
+When creating campaigns:
+- Select which account to use
+- Each campaign uses one account
+- Can change account per campaign
+- Account must be connected
+
+## Best Practices
+
+1. **Keep Connected**: Monitor account health regularly
+2. **Respect Limits**: Stay within Telegram rate limits
+3. **Use Multiple**: Distribute load across accounts
+4. **Monitor Status**: Check connection status regularly
+5. **Secure Accounts**: Keep account credentials secure
+6. **Test Regularly**: Test account connections
+
+## Troubleshooting
+
+### Account Disconnected
+
+If account shows as disconnected:
+
+1. Check Telegram app is working
+2. Verify phone number is correct
+3. Try reconnecting account
+4. Check for Telegram service issues
+5. Contact support if needed
+
+### Cannot Add Account
+
+If you cannot add an account:
+
+1. Verify phone number format
+2. Check internet connection
+3. Ensure Telegram is accessible
+4. Try QR code method instead
+5. Check for account limits
+
+### Health Check Fails
+
+If health check fails:
+
+1. Verify account is still valid
+2. Check Telegram app status
+3. Try reconnecting account
+4. Review error messages
+5. Contact support if persistent
+
+## Next Steps
+
+<Card
+  title="Adding Accounts"
+  icon="plus"
+  href="/accounts/adding-accounts"
+>
+  Learn how to add your first Telegram account
+</Card>
+
+<Card
+  title="Phone Authentication"
+  icon="phone"
+  href="/accounts/phone-authentication"
+>
+  Detailed guide to phone number authentication
+</Card>
+
+<Card
+  title="QR Authentication"
+  icon="qrcode"
+  href="/accounts/qr-authentication"
+>
+  Learn how to use QR code authentication
+</Card>
+

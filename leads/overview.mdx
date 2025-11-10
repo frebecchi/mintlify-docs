@@ -1,0 +1,274 @@
+---
+title: "Leads Overview"
+description: "Understanding leads and how to manage them in Reach"
+---
+
+## What are Leads?
+
+Leads are contacts in your Reach system - people you can send messages to through campaigns. Leads contain contact information, custom fields, and interaction history.
+
+<Note>
+  Screenshot placeholder: Add a screenshot of the leads list page
+</Note>
+
+## Lead Information
+
+### Basic Information
+
+Each lead contains:
+
+- **First Name**: Contact's first name
+- **Last Name**: Contact's last name
+- **Username**: Telegram username (if available)
+- **Phone Number**: Contact's phone number
+- **Country**: Country code/location
+- **Language**: Preferred language
+
+### Additional Data
+
+- **Source**: Where the lead came from (campaign, manual import, etc.)
+- **Status**: Lead status (active, blocked, etc.)
+- **Priority**: Priority level for the lead
+- **Tags**: Custom tags for organization
+- **Custom Fields**: Additional fields you define
+- **Campaign History**: Campaigns the lead participated in
+- **Response History**: Messages and responses
+
+## Lead Sources
+
+Leads can come from various sources:
+
+### Campaign Sources
+
+- Leads added through campaign participation
+- Automatically tracked when campaigns run
+- Linked to specific campaigns
+
+### Manual Import
+
+- Imported via CSV file
+- Manually added through the interface
+- Bulk import from external sources
+
+### API Integration
+
+- Added via API calls
+- Integrated from other systems
+- Automated lead capture
+
+### Other Sources
+
+- Direct additions
+- Form submissions
+- Other integrations
+
+<Info>
+  Understanding lead sources helps you track where your best leads come from and optimize your lead generation strategy.
+</Info>
+
+## Lead Statuses
+
+### Active
+
+Leads that are:
+- Available for campaigns
+- Not blocked
+- Can receive messages
+- Ready for outreach
+
+### Blocked
+
+Leads who have:
+- Blocked your Telegram account
+- Cannot receive messages
+- May need re-engagement
+- Should be handled carefully
+
+<Warning>
+  High blocking rates may indicate issues with your messaging strategy or rate limits.
+</Warning>
+
+### Archived
+
+Leads that are:
+- No longer active
+- Archived for organization
+- Not included in campaigns
+- Can be restored if needed
+
+## Lead Management
+
+### Viewing Leads
+
+The leads page displays all leads in a table showing:
+- Contact information
+- Status and priority
+- Source information
+- Tags and custom fields
+- Last contact date
+- Actions menu
+
+### Searching Leads
+
+Search leads by:
+- Name (first or last)
+- Username
+- Phone number
+- Email (if custom field)
+- Tags
+- Custom field values
+
+### Filtering Leads
+
+Filter leads by:
+- **Status**: Active, Blocked, Archived
+- **Source**: Campaign, Manual, API, etc.
+- **Priority**: High, Medium, Low
+- **Tags**: Specific tags
+- **Country**: Country code
+- **Language**: Language preference
+- **Custom Fields**: Field values
+
+### Sorting Leads
+
+Sort leads by:
+- Name (alphabetical)
+- Created date
+- Last contact date
+- Status
+- Priority
+- Source
+
+## Lead Actions
+
+### Edit Lead
+
+Modify lead information:
+- Update contact details
+- Change status and priority
+- Add or remove tags
+- Update custom fields
+- Edit source information
+
+### View Details
+
+View comprehensive lead information:
+- Full contact details
+- Campaign participation history
+- Message and response history
+- Custom field values
+- Interaction timeline
+
+### Delete Lead
+
+Permanently remove a lead:
+- Deletes lead and all associated data
+- Cannot be undone
+- Removes from all segments
+- Removes campaign history
+
+<Warning>
+  Deleting a lead permanently removes all associated data. Consider archiving instead if you may need the information later.
+</Warning>
+
+## Custom Fields
+
+Leads support custom fields for additional information:
+
+### Field Types
+
+- **Text**: Single-line text
+- **Textarea**: Multi-line text
+- **Number**: Numeric values
+- **Date**: Date values
+- **Dropdown**: Predefined options
+- **Multiselect**: Multiple selections
+- **Boolean**: Yes/No values
+- **Email**: Email addresses
+- **Phone**: Phone numbers
+- **URL**: Web addresses
+
+### Using Custom Fields
+
+- Add custom fields in Settings
+- Assign values to leads
+- Filter and search by custom fields
+- Use in segment rules
+- Display in lead lists
+
+<Card
+  title="Custom Fields"
+  icon="settings"
+  href="/leads/custom-fields"
+>
+  Learn how to create and manage custom fields for leads
+</Card>
+
+## Lead Segments
+
+Leads can be organized into segments:
+
+### What are Segments?
+
+Segments are dynamic lists of leads based on rules and conditions. Leads automatically join or leave segments based on matching rules.
+
+### Segment Benefits
+
+- **Targeted Campaigns**: Send campaigns to specific segments
+- **Organization**: Organize leads by characteristics
+- **Automation**: Automatic lead categorization
+- **Analysis**: Analyze lead groups
+
+<Card
+  title="Segments"
+  icon="target"
+  href="/segments/overview"
+>
+  Learn how to create and use segments
+</Card>
+
+## Organization View
+
+### My Leads
+
+View only leads you created or imported. This is the default view.
+
+### All Organization Leads
+
+View leads from all organization members. Available to:
+- Organization owners
+- Organization admins
+
+**Features:**
+- See all organization leads
+- Filter by creator
+- View organization-wide statistics
+- Note: Editing permissions depend on lead ownership
+
+## Best Practices
+
+1. **Keep Data Clean**: Regularly update lead information
+2. **Use Tags**: Organize leads with meaningful tags
+3. **Custom Fields**: Add relevant custom fields for your use case
+4. **Segment**: Create segments for targeted campaigns
+5. **Monitor Status**: Track blocked leads and adjust strategy
+6. **Document**: Add notes and custom fields for context
+
+## Next Steps
+
+<Card
+  title="Managing Leads"
+  icon="users"
+  href="/leads/managing-leads"
+>
+  Learn how to add, edit, and organize leads
+</Card>
+
+<Card
+  title="Custom Fields"
+  icon="settings"
+  href="/leads/custom-fields"
+>
+  Set up custom fields to track additional lead information
+</Card>
+

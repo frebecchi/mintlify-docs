@@ -1,0 +1,305 @@
+---
+title: "Managing Campaigns"
+description: "Learn how to manage, edit, and optimize your campaigns"
+---
+
+## Campaign Management Overview
+
+Once campaigns are created, you can manage them through various actions and settings. This guide covers all aspects of campaign management.
+
+## Viewing Campaigns
+
+### Campaign List
+
+The campaigns page displays all your campaigns in a table format showing:
+
+- **Status**: Current campaign status with color-coded badges
+- **Campaign Name**: Name and description
+- **Progress**: Completed contacts vs total contacts
+- **Sender**: Telegram account used
+- **Created At**: Creation date
+- **Actions**: Quick action menu
+
+<Note>
+  Screenshot placeholder: Add a screenshot of the campaigns list table
+</Note>
+
+### Campaign Details
+
+Click on a campaign name to view detailed information:
+
+- **Overview**: Campaign statistics and progress
+- **Flow**: Visual representation of the campaign flow
+- **Contacts**: List of contacts in the campaign
+- **Statistics**: Performance metrics
+- **Settings**: Campaign configuration
+
+<Note>
+  Screenshot placeholder: Add a screenshot of the campaign details page
+</Note>
+
+## Campaign Actions
+
+### Launch Campaign
+
+Launch a campaign to start sending messages:
+
+1. Select a campaign in Draft or Paused status
+2. Click **"Launch Campaign"** from the actions menu
+3. Confirm the launch
+4. Campaign status changes to Active
+
+<Info>
+  Only campaigns in Draft or Paused status can be launched. Active campaigns are already running.
+</Info>
+
+### Pause Campaign
+
+Temporarily stop an active campaign:
+
+1. Select an Active campaign
+2. Click **"Pause Campaign"** from the actions menu
+3. Campaign stops sending new messages
+4. Status changes to Paused
+
+<Note>
+  Pausing a campaign stops new message sends but preserves progress. You can resume paused campaigns.
+</Note>
+
+### Stop Campaign
+
+Immediately stop a campaign:
+
+1. Select an Active or Paused campaign
+2. Click **"Stop Campaign"** from the actions menu
+3. Confirm the stop action
+4. Campaign status changes to Cancelled
+
+<Warning>
+  Stopping a campaign cannot be undone. All pending executions are cancelled immediately.
+</Warning>
+
+### Edit Campaign
+
+Modify campaign settings and flow:
+
+**When You Can Edit:**
+- Draft campaigns (always editable)
+- Paused campaigns (can be edited)
+- Scheduled campaigns (before start time)
+
+**When You Cannot Edit:**
+- Active campaigns (must pause first)
+- Completed campaigns (cannot be edited)
+- Cancelled campaigns (cannot be edited)
+
+**What You Can Edit:**
+- Campaign name and description
+- Flow configuration
+- Telegram account
+- Contact selection
+- Schedule settings
+
+<Note>
+  Screenshot placeholder: Add a screenshot showing the edit campaign interface
+</Note>
+
+### Duplicate Campaign
+
+Create a copy of an existing campaign:
+
+1. Select any campaign
+2. Click **"Duplicate"** from the actions menu
+3. A new campaign is created with:
+   - Same name with "(Copy)" suffix
+   - Same flow configuration
+   - Same settings
+   - Status set to Draft
+   - No contacts assigned (you must select contacts)
+
+<Info>
+  Duplicating is useful for creating variations of successful campaigns or testing changes.
+</Info>
+
+### Delete Campaign
+
+Permanently remove a campaign:
+
+1. Select a campaign
+2. Click **"Delete"** from the actions menu
+3. Confirm the deletion
+4. Campaign is permanently removed
+
+<Warning>
+  Deleted campaigns cannot be recovered. Make sure you want to delete before confirming.
+</Warning>
+
+## Enable/Disable Campaigns
+
+### Enable Campaign
+
+Enable a disabled campaign to allow launching:
+
+1. Toggle the enable/disable switch to "Enabled"
+2. Campaign can now be launched
+3. Any previously cancelled executions remain cancelled
+
+### Disable Campaign
+
+Disable a campaign to prevent launching:
+
+1. Toggle the enable/disable switch to "Disabled"
+2. Campaign cannot be launched
+3. Any active executions are immediately cancelled
+
+<Info>
+  Disabling is useful for temporarily preventing campaign launches without deleting the campaign.
+</Info>
+
+## Bulk Operations
+
+Select multiple campaigns to perform bulk actions:
+
+### Select Campaigns
+
+- Click checkboxes to select individual campaigns
+- Use "Select All" to select all visible campaigns
+- Selected campaigns are highlighted
+
+### Bulk Actions Available
+
+**Enable**: Enable all selected campaigns
+**Disable**: Disable all selected campaigns
+**Launch**: Start all selected campaigns (if in Draft/Paused status)
+**Stop**: Stop all selected campaigns (if Active)
+**Delete**: Delete all selected campaigns
+
+<Warning>
+  Bulk delete cannot be undone. Be careful when deleting multiple campaigns at once.
+</Warning>
+
+## Campaign Statistics
+
+View detailed statistics for each campaign:
+
+### Overview Metrics
+
+- **Total Contacts**: Number of contacts in the campaign
+- **Completed Contacts**: Contacts that completed the campaign
+- **Messages Sent**: Total messages sent
+- **Response Rate**: Percentage of contacts who responded
+- **Deals Created**: Number of deals generated from the campaign
+
+### Progress Tracking
+
+- **Completion Percentage**: Visual progress bar
+- **Contacts Remaining**: Contacts still to be processed
+- **Estimated Completion**: Estimated time to complete (if applicable)
+
+### Performance Charts
+
+- **Progress Over Time**: Chart showing completion progress
+- **Response Rate Trends**: Response rate over time
+- **Message Volume**: Messages sent per day
+
+<Note>
+  Screenshot placeholder: Add a screenshot showing campaign statistics and charts
+</Note>
+
+## Campaign Settings
+
+### General Settings
+
+- **Campaign Name**: Edit the campaign name
+- **Description**: Update the description
+- **Telegram Account**: Change the sending account
+
+### Flow Settings
+
+- **Start Type**: Change between immediate and scheduled
+- **Schedule**: Update scheduled start time
+- **Timezone**: Modify timezone settings
+
+### Contact Settings
+
+- **Add Contacts**: Add more contacts to the campaign
+- **Remove Contacts**: Remove contacts from the campaign
+- **Change Segment**: Update the target segment
+
+## Organization View
+
+### My Campaigns
+
+View only campaigns you created. This is the default view.
+
+### All Organization Campaigns
+
+View campaigns from all organization members. Available to:
+- Organization owners
+- Organization admins
+
+**Features:**
+- See campaigns created by team members
+- View organization-wide statistics
+- Filter by creator
+- Note: You can only edit your own campaigns (unless you're an owner/admin)
+
+## Best Practices
+
+1. **Regular Monitoring**: Check campaign progress regularly
+2. **Optimize Based on Data**: Use statistics to improve campaigns
+3. **Test Variations**: Duplicate and test different approaches
+4. **Organize**: Use clear naming and descriptions
+5. **Document Changes**: Note why you made changes
+6. **Respect Limits**: Monitor rate limits and account health
+
+## Troubleshooting
+
+### Campaign Not Sending
+
+If campaigns aren't sending messages:
+
+1. Check Telegram account is connected and healthy
+2. Verify campaign is enabled
+3. Ensure campaign status is Active
+4. Check contacts are selected
+5. Verify flow is properly configured
+6. Check for rate limit issues
+
+### Campaign Stuck
+
+If a campaign appears stuck:
+
+1. Check campaign status
+2. Verify Telegram account health
+3. Review campaign statistics
+4. Try pausing and resuming
+5. Contact support if issues persist
+
+### Cannot Edit Campaign
+
+If you cannot edit a campaign:
+
+1. Check campaign status (must be Draft, Paused, or Scheduled)
+2. Verify you have permission (must be creator or admin/owner)
+3. Try refreshing the page
+4. Check if campaign is locked by another process
+
+## Next Steps
+
+<Card
+  title="Campaign Statuses"
+  icon="info-circle"
+  href="/campaigns/campaign-statuses"
+>
+  Learn about all campaign statuses and their meanings
+</Card>
+
+<Card
+  title="Bulk Operations"
+  icon="list"
+  href="/campaigns/bulk-operations"
+>
+  Master bulk operations for efficient campaign management
+</Card>
+

@@ -1,0 +1,234 @@
+---
+title: "Campaigns Overview"
+description: "Learn about campaigns and how they work in Reach"
+---
+
+## What are Campaigns?
+
+Campaigns are automated messaging workflows that send messages to your leads through Telegram. A campaign defines:
+
+- **Target Audience**: Which leads or segments to contact
+- **Message Flow**: The sequence of messages and actions
+- **Sending Schedule**: When and how messages are sent
+- **Telegram Account**: Which account to use for sending
+
+<Note>
+  Screenshot placeholder: Add a screenshot showing the campaigns list page
+</Note>
+
+## Campaign Components
+
+### Campaign Name
+
+A descriptive name for your campaign. Use names that clearly identify the campaign's purpose, such as:
+- "Product Launch - Q1 2024"
+- "Welcome Sequence - New Users"
+- "Follow-up - No Response"
+
+### Description
+
+Optional description providing additional context about the campaign. Useful for:
+- Documenting campaign goals
+- Notes for team members
+- Campaign history
+
+### Telegram Account
+
+The Telegram account used to send messages. You must:
+- Connect at least one Telegram account before creating campaigns
+- Select which account to use for each campaign
+- Ensure the account is healthy and connected
+
+<Warning>
+  Campaigns cannot send messages if the associated Telegram account is disconnected or unhealthy.
+</Warning>
+
+### Flow Configuration
+
+The visual workflow defining:
+- **Start Node**: When the campaign begins (immediate or scheduled)
+- **Message Nodes**: Messages to send
+- **Delay Nodes**: Wait periods between messages
+- **Condition Nodes**: Conditional logic based on responses
+- **End Node**: Campaign completion
+
+<Note>
+  Screenshot placeholder: Add a screenshot of the campaign flow builder
+</Note>
+
+## Campaign Statuses
+
+Campaigns can have different statuses:
+
+### Draft
+
+Campaigns that are created but not yet launched. Draft campaigns:
+- Can be edited freely
+- Are not active
+- Do not send messages
+- Can be deleted
+
+### Active
+
+Campaigns that are currently running. Active campaigns:
+- Are sending messages to leads
+- Cannot be edited (must be paused first)
+- Show real-time progress
+- Can be paused or stopped
+
+### Paused
+
+Campaigns that were active but are temporarily stopped. Paused campaigns:
+- Stop sending new messages
+- Can be resumed
+- Can be edited
+- Preserve progress
+
+### Completed
+
+Campaigns that have finished processing all contacts. Completed campaigns:
+- Have sent all messages
+- Cannot be restarted
+- Can be duplicated
+- Show final statistics
+
+### Cancelled
+
+Campaigns that were stopped before completion. Cancelled campaigns:
+- Were stopped manually
+- May have partially sent messages
+- Cannot be restarted
+- Can be duplicated
+
+### Scheduled
+
+Campaigns set to start at a specific date and time. Scheduled campaigns:
+- Are waiting to start
+- Can be edited before start time
+- Will automatically become active at the scheduled time
+- Can be cancelled before starting
+
+### Tracking
+
+Campaigns that are tracking responses but not actively sending. Tracking campaigns:
+- Monitor for responses
+- May send follow-up messages
+- Are in a monitoring state
+
+## Campaign Enable/Disable
+
+Campaigns can be enabled or disabled:
+
+- **Enabled**: Campaign can be launched and will execute normally
+- **Disabled**: Campaign cannot be launched and any active executions are cancelled
+
+<Info>
+  Disabling a campaign immediately cancels all pending executions. Use this to quickly stop a campaign without deleting it.
+</Info>
+
+## View Modes
+
+### My Campaigns
+
+View only campaigns you created. This is the default view for regular users.
+
+### All Organization Campaigns
+
+View campaigns from all organization members. Available only to:
+- Organization owners
+- Organization admins
+
+<Note>
+  You can only edit campaigns you created, unless you're an organization owner/admin with special permissions.
+</Note>
+
+## Campaign List Features
+
+### Search
+
+Search campaigns by name or description. The search is case-insensitive and searches across:
+- Campaign names
+- Campaign descriptions
+
+### Filters
+
+Filter campaigns by:
+- **Status**: Draft, Active, Paused, Completed, Cancelled, Scheduled, Tracking
+- **Sender**: Filter by Telegram account
+- **Tags**: Filter by campaign tags (if configured)
+- **Creator**: Filter by who created the campaign (organization view)
+
+### Sorting
+
+Sort campaigns by:
+- **Name**: Alphabetical order
+- **Status**: Status priority
+- **Completed Contacts**: Number of contacts completed
+- **Total Contacts**: Total number of contacts
+- **Sender**: Telegram account name
+- **Created At**: Creation date
+
+### Bulk Operations
+
+Select multiple campaigns to perform bulk actions:
+- **Enable**: Enable selected campaigns
+- **Disable**: Disable selected campaigns
+- **Launch**: Start selected campaigns
+- **Stop**: Stop selected campaigns
+- **Delete**: Delete selected campaigns
+
+<Warning>
+  Bulk delete cannot be undone. Make sure you want to delete the selected campaigns.
+</Warning>
+
+## Campaign Progress
+
+Each campaign shows progress indicators:
+
+- **Completed Contacts**: Number of contacts that completed the campaign
+- **Total Contacts**: Total number of contacts in the campaign
+- **Progress Bar**: Visual representation of completion percentage
+
+<Note>
+  Screenshot placeholder: Add a screenshot showing campaign progress indicators
+</Note>
+
+## Quick Actions
+
+From the campaign list, you can:
+
+- **Create Campaign**: Start a new campaign
+- **Edit**: Modify campaign settings and flow
+- **Launch**: Start an inactive campaign
+- **Pause**: Temporarily stop an active campaign
+- **Stop**: Immediately stop a campaign
+- **Duplicate**: Create a copy of the campaign
+- **Delete**: Remove the campaign permanently
+
+## Best Practices
+
+1. **Name Clearly**: Use descriptive names that identify campaign purpose
+2. **Test First**: Create test campaigns with small audiences before full launch
+3. **Monitor Progress**: Regularly check campaign progress and statistics
+4. **Respect Limits**: Be aware of Telegram rate limits to avoid account issues
+5. **Organize**: Use descriptions and tags to organize campaigns
+6. **Document**: Add descriptions explaining campaign goals and strategy
+
+## Next Steps
+
+<Card
+  title="Creating Campaigns"
+  icon="plus"
+  href="/campaigns/creating-campaigns"
+>
+  Learn how to create your first campaign
+</Card>
+
+<Card
+  title="Managing Campaigns"
+  icon="settings"
+  href="/campaigns/managing-campaigns"
+>
+  Learn how to manage and optimize your campaigns
+</Card>
+

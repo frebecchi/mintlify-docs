@@ -1,0 +1,406 @@
+---
+title: "Custom Fields for Leads"
+description: "Create and manage custom fields to track additional lead information"
+---
+
+## What are Custom Fields?
+
+Custom fields allow you to store additional information about leads beyond the standard contact fields. Use custom fields to track information specific to your business needs.
+
+## Field Types
+
+### Text
+
+Single-line text input for short values:
+- Company name
+- Job title
+- Short notes
+- Single-line descriptions
+
+**Configuration:**
+- Field name (internal)
+- Field label (display)
+- Description (help text)
+- Required (optional)
+- Default value (optional)
+
+### Textarea
+
+Multi-line text input for longer content:
+- Notes
+- Descriptions
+- Comments
+- Long-form information
+
+**Configuration:**
+- Field name
+- Field label
+- Description
+- Required
+- Rows (height)
+
+### Number
+
+Numeric values:
+- Age
+- Company size
+- Revenue
+- Any numeric data
+
+**Configuration:**
+- Field name
+- Field label
+- Description
+- Required
+- Min value (optional)
+- Max value (optional)
+- Decimal places
+
+### Date
+
+Date values:
+- Birth date
+- Sign-up date
+- Event dates
+- Important dates
+
+**Configuration:**
+- Field name
+- Field label
+- Description
+- Required
+- Date format
+
+### Dropdown
+
+Single selection from predefined options:
+- Industry
+- Lead source
+- Product interest
+- Status options
+
+**Configuration:**
+- Field name
+- Field label
+- Description
+- Required
+- Options (list of values)
+
+<Note>
+  Screenshot placeholder: Add a screenshot showing dropdown field configuration
+</Note>
+
+### Multiselect
+
+Multiple selections from predefined options:
+- Interests
+- Product categories
+- Skills
+- Multiple tags
+
+**Configuration:**
+- Field name
+- Field label
+- Description
+- Required
+- Options (list of values)
+
+### Boolean/Checkbox
+
+Yes/No or true/false values:
+- Newsletter subscription
+- Terms accepted
+- Feature enabled
+- Boolean flags
+
+**Configuration:**
+- Field name
+- Field label
+- Description
+- Required
+- Default value (true/false)
+
+### Email
+
+Email address with validation:
+- Secondary email
+- Work email
+- Contact email
+
+**Configuration:**
+- Field name
+- Field label
+- Description
+- Required
+- Email validation
+
+### Phone
+
+Phone number with formatting:
+- Work phone
+- Mobile phone
+- Alternative phone
+
+**Configuration:**
+- Field name
+- Field label
+- Description
+- Required
+- Phone format
+
+### URL
+
+Web address with validation:
+- Website
+- LinkedIn profile
+- Social media links
+
+**Configuration:**
+- Field name
+- Field label
+- Description
+- Required
+- URL validation
+
+## Creating Custom Fields
+
+### Access Custom Fields
+
+1. Navigate to **Settings** → **Custom Fields**
+2. Or go to **Leads** → **Custom Fields** (if available in sidebar)
+
+<Note>
+  Screenshot placeholder: Add a screenshot showing the custom fields settings page
+</Note>
+
+### Create New Field
+
+1. Click **"Add Custom Field"** or **"Create Field"**
+2. Select field type
+3. Configure field:
+   - **Field Name**: Internal identifier (lowercase, underscores)
+   - **Field Label**: Display name
+   - **Description**: Help text for users
+   - **Required**: Whether field is mandatory
+   - **Type-specific options**: Based on field type
+4. Click **"Save"** or **"Create"**
+
+### Field Configuration
+
+**Field Name:**
+- Internal identifier
+- Lowercase letters, numbers, underscores
+- Cannot be changed after creation
+- Used in API and segments
+
+**Field Label:**
+- Display name shown in UI
+- Can include spaces and special characters
+- Can be changed later
+- User-friendly name
+
+**Description:**
+- Help text explaining the field
+- Shown when editing leads
+- Guides users on what to enter
+
+**Required:**
+- Whether field must have a value
+- Required fields show asterisk (*)
+- Validation prevents saving without value
+
+## Managing Custom Fields
+
+### Field List
+
+View all custom fields:
+- Field name and label
+- Field type
+- Required status
+- Active/Inactive status
+- Actions menu
+
+### Edit Field
+
+Modify field configuration:
+- Change label and description
+- Update required status
+- Modify type-specific options
+- Cannot change field name or type
+
+<Warning>
+  Changing field type may cause data loss. Consider creating a new field instead.
+</Warning>
+
+### Deactivate Field
+
+Temporarily disable a field:
+- Field is hidden from lead forms
+- Existing values are preserved
+- Can be reactivated later
+- Useful for deprecated fields
+
+### Delete Field
+
+Permanently remove a field:
+- Deletes field configuration
+- Removes all field values from leads
+- Cannot be undone
+- Use deactivate instead if you may need data later
+
+<Warning>
+  Deleting a field permanently removes all associated data. Consider deactivating instead.
+</Warning>
+
+### Field Ordering
+
+Reorder fields for display:
+- Drag and drop to reorder
+- Affects display order in lead forms
+- Important fields first
+- Logical grouping
+
+## Using Custom Fields
+
+### In Lead Forms
+
+Custom fields appear in:
+- Lead creation form
+- Lead edit form
+- Bulk edit form
+- Import mapping
+
+### In Lead Lists
+
+Display custom fields:
+- Add columns to lead table
+- Show field values
+- Filter by field values
+- Sort by field values
+
+### In Segments
+
+Use custom fields in segment rules:
+- Filter leads by field values
+- Create dynamic segments
+- Target specific lead groups
+- Automate lead organization
+
+<Card
+  title="Segments"
+  icon="target"
+  href="/segments/overview"
+>
+  Learn how to use custom fields in segments
+</Card>
+
+### In Campaigns
+
+Reference custom fields:
+- Use in message variables
+- Personalize messages
+- Conditional logic
+- Dynamic content
+
+## Best Practices
+
+### Field Planning
+
+1. **Plan Ahead**: Think about what information you need
+2. **Keep It Simple**: Don't create too many fields
+3. **Use Appropriate Types**: Choose the right field type
+4. **Name Consistently**: Use consistent naming conventions
+5. **Document**: Add descriptions explaining fields
+
+### Field Organization
+
+1. **Group Related Fields**: Organize logically
+2. **Order Matters**: Put important fields first
+3. **Use Required Sparingly**: Only require essential fields
+4. **Keep Active**: Deactivate unused fields
+5. **Review Regularly**: Remove obsolete fields
+
+### Data Quality
+
+1. **Validate Input**: Use appropriate field types
+2. **Set Defaults**: Provide default values when helpful
+3. **Use Dropdowns**: Limit options with dropdowns
+4. **Regular Cleanup**: Review and clean field values
+5. **Train Users**: Ensure team understands fields
+
+## Common Use Cases
+
+### B2B Sales
+
+- Company name
+- Industry
+- Company size
+- Revenue
+- Decision maker
+- Pain points
+
+### E-commerce
+
+- Product interests
+- Purchase history
+- Cart value
+- Preferred categories
+- Discount eligibility
+
+### Service Businesses
+
+- Service type
+- Budget range
+- Timeline
+- Location
+- Referral source
+
+## Troubleshooting
+
+### Field Not Appearing
+
+If custom field doesn't appear:
+
+1. Check field is active
+2. Verify permissions
+3. Refresh the page
+4. Check field visibility settings
+5. Ensure field was saved
+
+### Cannot Edit Field
+
+If you cannot edit a field:
+
+1. Check permissions (admin/owner)
+2. Verify field is not system field
+3. Try refreshing page
+4. Check for field locks
+
+### Data Loss
+
+If field values are missing:
+
+1. Check if field was deleted
+2. Verify field is active
+3. Check filters
+4. Review field history
+5. Contact support if needed
+
+## Related Topics
+
+<Card
+  title="Managing Leads"
+  icon="users"
+  href="/leads/managing-leads"
+>
+  Learn how to use custom fields when managing leads
+</Card>
+
+<Card
+  title="Segments"
+  icon="target"
+  href="/segments/overview"
+>
+  Use custom fields in segment rules
+</Card>
+

@@ -1,0 +1,175 @@
+---
+title: "Organization Permissions"
+description: "Understanding roles and permissions in organizations"
+---
+
+## Permission Overview
+
+Organizations use role-based permissions to control what members can do. Each role has different levels of access.
+
+## Roles
+
+### Owner
+
+Organization owners have full access:
+- **Organization Settings**: Full control
+- **Member Management**: Add/remove members, change roles
+- **Data Access**: View all organization data
+- **Data Editing**: Can edit any data (with restrictions)
+- **Organization Deletion**: Can delete organization
+
+### Admin
+
+Organization admins have elevated access:
+- **Data Access**: View all organization data
+- **Data Editing**: Limited editing of others' data
+- **Member Management**: Can add/remove members (limited)
+- **Settings**: Can manage most settings
+- **Cannot**: Delete organization or change owner
+
+### Member
+
+Organization members have standard access:
+- **Own Data**: Full control over own data
+- **Organization Data**: View access (if enabled)
+- **Data Creation**: Can create own campaigns/leads/deals
+- **Limited Settings**: Limited access to settings
+- **Cannot**: Manage members or organization settings
+
+## Data Access
+
+### View Permissions
+
+**My Data (All Roles):**
+- Always accessible
+- Full view and edit
+- Default view for members
+
+**Organization Data:**
+- **Owner/Admin**: Can view all
+- **Member**: View only if enabled
+- Filter by creator available
+
+### Edit Permissions
+
+**Own Data (All Roles):**
+- Full edit permissions
+- Can delete own data
+- No restrictions
+
+**Others' Data:**
+- **Owner/Admin**: Can edit (with some restrictions)
+- **Member**: Cannot edit others' data
+- Depends on item status (e.g., campaigns)
+
+## Feature Permissions
+
+### Campaigns
+
+**Create:**
+- All roles can create campaigns
+
+**View:**
+- Own campaigns: All roles
+- Organization campaigns: Owner/Admin, Members (if enabled)
+
+**Edit:**
+- Own campaigns: All roles (if status allows)
+- Others' campaigns: Owner/Admin only (if status allows)
+
+**Delete:**
+- Own campaigns: All roles
+- Others' campaigns: Owner/Admin only
+
+### Leads
+
+**Create:**
+- All roles can create leads
+
+**View:**
+- Own leads: All roles
+- Organization leads: Owner/Admin, Members (if enabled)
+
+**Edit:**
+- Own leads: All roles
+- Others' leads: Owner/Admin only
+
+**Delete:**
+- Own leads: All roles
+- Others' leads: Owner/Admin only
+
+### Deals
+
+**Create:**
+- All roles can create deals
+
+**View:**
+- Own deals: All roles
+- Organization deals: Owner/Admin, Members (if enabled)
+
+**Edit:**
+- Own deals: All roles
+- Others' deals: Owner/Admin only
+
+**Delete:**
+- Own deals: All roles
+- Others' deals: Owner/Admin only
+
+### Segments
+
+**Create:**
+- All roles can create segments
+
+**View:**
+- Own segments: All roles
+- Organization segments: Owner/Admin, Members (if enabled)
+
+**Edit:**
+- Own segments: All roles
+- Others' segments: Owner/Admin only
+
+**Delete:**
+- Own segments: All roles
+- Others' segments: Owner/Admin only
+
+## Settings Permissions
+
+### Organization Settings
+
+**Owner:**
+- Full access
+- Can change organization name
+- Can delete organization
+
+**Admin:**
+- Most settings access
+- Cannot delete organization
+- Cannot change owner
+
+**Member:**
+- Limited access
+- Cannot manage organization
+- Personal settings only
+
+### Feature Settings
+
+**Custom Fields:**
+- Owner/Admin: Can create/edit/delete
+- Member: Can use, cannot modify
+
+**Pipeline Stages:**
+- Owner/Admin: Can customize
+- Member: Can use, cannot modify
+
+**Deal Fields:**
+- Owner/Admin: Can customize
+- Member: Can use, cannot modify
+
+## Best Practices
+
+1. **Assign Roles Appropriately**: Give roles based on responsibilities
+2. **Limit Admins**: Only make trusted users admins
+3. **Regular Review**: Review member roles regularly
+4. **Document Permissions**: Make permissions clear to team
+5. **Use View Modes**: Switch between personal and organization views
+

@@ -1,0 +1,238 @@
+---
+title: "Bulk Campaign Operations"
+description: "Efficiently manage multiple campaigns at once"
+---
+
+## Bulk Operations Overview
+
+Bulk operations allow you to perform actions on multiple campaigns simultaneously, saving time when managing many campaigns.
+
+## Selecting Campaigns
+
+### Individual Selection
+
+Select campaigns individually by clicking the checkbox next to each campaign in the list.
+
+### Select All
+
+Use the checkbox in the table header to select all visible campaigns. This selects:
+- All campaigns currently displayed
+- Respects current filters and search
+- Does not select campaigns on other pages
+
+### Deselecting
+
+- Click individual checkboxes to deselect
+- Click the header checkbox again to deselect all
+- Use the "Clear" button in the bulk actions bar
+
+<Note>
+  Screenshot placeholder: Add a screenshot showing campaign selection with checkboxes
+</Note>
+
+## Bulk Actions Bar
+
+When campaigns are selected, a bulk actions bar appears showing:
+- Number of selected campaigns
+- Available bulk actions
+- Clear selection button
+
+<Note>
+  Screenshot placeholder: Add a screenshot of the bulk actions bar
+</Note>
+
+## Available Bulk Operations
+
+### Enable Campaigns
+
+Enable multiple disabled campaigns at once:
+
+1. Select campaigns to enable
+2. Click **"Enable"** in the bulk actions bar
+3. Selected campaigns are enabled
+4. Campaigns can now be launched
+
+<Info>
+  Only disabled campaigns can be enabled. Already enabled campaigns are unaffected.
+</Info>
+
+### Disable Campaigns
+
+Disable multiple campaigns to prevent launching:
+
+1. Select campaigns to disable
+2. Click **"Disable"** in the bulk actions bar
+3. Selected campaigns are disabled
+4. Any active executions are cancelled
+
+<Warning>
+  Disabling active campaigns will immediately cancel their executions. Make sure you want to stop them.
+</Warning>
+
+### Launch Campaigns
+
+Start multiple campaigns simultaneously:
+
+1. Select campaigns in Draft or Paused status
+2. Click **"Launch"** in the bulk actions bar
+3. Selected campaigns are launched
+4. Status changes to Active
+
+<Note>
+  Only campaigns in Draft or Paused status can be launched. Other campaigns are skipped.
+</Note>
+
+### Stop Campaigns
+
+Stop multiple active campaigns:
+
+1. Select active campaigns
+2. Click **"Stop"** in the bulk actions bar
+3. Confirm the stop action
+4. Selected campaigns are stopped
+5. Status changes to Cancelled
+
+<Warning>
+  Stopping campaigns cannot be undone. All pending executions are cancelled immediately.
+</Warning>
+
+### Delete Campaigns
+
+Permanently remove multiple campaigns:
+
+1. Select campaigns to delete
+2. Click **"Delete"** in the bulk actions bar
+3. Confirm the deletion
+4. Selected campaigns are permanently deleted
+
+<Warning>
+  Bulk delete cannot be undone. Make sure you want to delete the selected campaigns before confirming.
+</Warning>
+
+## Bulk Operation Results
+
+After performing a bulk operation, you'll see:
+
+- **Success Message**: Number of campaigns successfully processed
+- **Error Message**: Any campaigns that couldn't be processed
+- **Updated Status**: Campaigns reflect their new status
+- **Selection Cleared**: Checkboxes are automatically cleared
+
+<Info>
+  If some campaigns fail, the operation continues for the remaining campaigns. Check error messages for details.
+</Info>
+
+## Best Practices
+
+### Before Bulk Operations
+
+1. **Review Selection**: Double-check which campaigns are selected
+2. **Verify Status**: Ensure campaigns are in the correct status for the operation
+3. **Backup Important**: Consider duplicating important campaigns before bulk delete
+4. **Test First**: Try bulk operations on a small group first
+
+### During Bulk Operations
+
+1. **Wait for Completion**: Don't navigate away during bulk operations
+2. **Monitor Progress**: Watch for success/error messages
+3. **Check Results**: Verify campaigns were processed correctly
+
+### After Bulk Operations
+
+1. **Review Changes**: Check that campaigns have the expected status
+2. **Verify Results**: Confirm the operation achieved your goals
+3. **Document**: Note what was changed and why
+
+## Limitations
+
+### Operation Limits
+
+- Bulk operations process campaigns in batches
+- Large selections may take time to process
+- Some operations may have rate limits
+
+### Status Restrictions
+
+- **Enable/Disable**: Works on any status
+- **Launch**: Only Draft and Paused campaigns
+- **Stop**: Only Active campaigns
+- **Delete**: Any status except Active (must stop first)
+
+### Permission Restrictions
+
+- You can only perform bulk operations on campaigns you created
+- Organization admins/owners may have additional permissions
+- Some operations require specific permissions
+
+## Troubleshooting
+
+### Bulk Operation Fails
+
+If bulk operations fail:
+
+1. Check selected campaigns are in correct status
+2. Verify you have permissions
+3. Ensure campaigns are not locked
+4. Try smaller batches
+5. Check for error messages
+
+### Some Campaigns Not Processed
+
+If some campaigns aren't processed:
+
+1. Check their status (may not be eligible)
+2. Verify permissions
+3. Review error messages
+4. Try processing them individually
+
+### Selection Cleared Unexpectedly
+
+If selection is cleared:
+
+1. This is normal after bulk operations
+2. Re-select campaigns if needed
+3. Use filters to narrow down campaigns
+4. Check if page was refreshed
+
+## Use Cases
+
+### Campaign Cleanup
+
+Use bulk delete to clean up:
+- Old test campaigns
+- Completed campaigns no longer needed
+- Duplicate campaigns
+- Failed campaigns
+
+### Campaign Launch
+
+Use bulk launch to:
+- Start multiple campaigns at once
+- Launch scheduled campaigns together
+- Resume multiple paused campaigns
+
+### Campaign Management
+
+Use bulk enable/disable to:
+- Temporarily disable multiple campaigns
+- Enable campaigns after maintenance
+- Manage campaign availability
+
+## Related Topics
+
+<Card
+  title="Managing Campaigns"
+  icon="settings"
+  href="/campaigns/managing-campaigns"
+>
+  Learn individual campaign management
+</Card>
+
+<Card
+  title="Campaign Statuses"
+  icon="info-circle"
+  href="/campaigns/campaign-statuses"
+>
+  Understand campaign statuses for bulk operations
+</Card>
+

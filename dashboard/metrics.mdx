@@ -1,0 +1,237 @@
+---
+title: "Understanding Dashboard Metrics"
+description: "Detailed explanation of all dashboard metrics and what they mean"
+---
+
+## Metric Categories
+
+The Reach dashboard displays metrics in three main categories: Leads, Messages, and Deals.
+
+## Lead Metrics
+
+### Total Leads
+
+The total number of leads in your system, including:
+- Leads imported from CSV or other sources
+- Leads added manually
+- Leads created from campaign interactions
+- Leads from all segments
+
+<Info>
+  This metric includes all leads regardless of their status (active, blocked, etc.).
+</Info>
+
+### Active Leads
+
+Leads that are currently:
+- Included in active campaigns
+- Not blocked
+- Not archived
+- Available for outreach
+
+### New Leads
+
+Leads added within the selected time period. This helps you track:
+- Lead growth over time
+- Effectiveness of lead generation efforts
+- Campaign performance in attracting new leads
+
+### Blocked Leads
+
+Leads who have blocked your Telegram account. This metric helps you:
+- Monitor account health
+- Identify potential issues with messaging
+- Track blocking trends
+
+<Warning>
+  High blocking rates may indicate issues with your messaging strategy or rate limits.
+</Warning>
+
+## Message Metrics
+
+### Messages Sent
+
+Total count of messages sent through all campaigns. This includes:
+- Initial campaign messages
+- Follow-up messages
+- Sequence messages
+- Manual messages sent through campaigns
+
+### Messages Delivered
+
+Messages successfully delivered to recipients. A message is considered delivered when:
+- Telegram confirms delivery
+- The message reaches the recipient's device
+- No delivery errors occurred
+
+<Note>
+  Delivery doesn't guarantee the message was read or opened.
+</Note>
+
+### Response Rate
+
+The percentage of messages that received a response from the recipient. Calculated as:
+
+```
+Response Rate = (Messages with Responses / Messages Sent) × 100
+```
+
+<Info>
+  A good response rate varies by industry and campaign type. Track your response rate over time to identify trends.
+</Info>
+
+### Open Rate
+
+The percentage of messages that were opened by recipients. This metric:
+- Requires read receipts to be enabled
+- May not be available for all message types
+- Helps measure engagement beyond delivery
+
+## Deal Metrics
+
+### Total Deals
+
+All deals in your pipeline, including:
+- Active deals in progress
+- Won deals (successfully closed)
+- Lost deals (closed without success)
+- Deals in any pipeline stage
+
+### Active Deals
+
+Deals currently in progress, excluding:
+- Won deals
+- Lost deals
+- Archived deals
+
+### Won Deals
+
+Deals that were successfully closed. This metric shows:
+- Number of successful deals
+- Total value of won deals
+- Win rate percentage
+
+### Deal Value
+
+The total monetary value of all deals in your pipeline. This includes:
+- One-time payments
+- Recurring revenue (MRR - Monthly Recurring Revenue)
+- Annual contracts
+- Other revenue types
+
+<Note>
+  Deal values are displayed in the currency configured for each deal.
+</Note>
+
+## Funnel Metrics
+
+### Lead Funnel
+
+The lead funnel visualizes the conversion process:
+
+1. **Total Leads**: Starting point
+2. **Leads in Campaigns**: Leads included in active campaigns
+3. **Leads Responded**: Leads who responded to messages
+4. **Leads Converted**: Leads converted to deals
+
+<Note>
+  Screenshot placeholder: Add a visual diagram of the lead funnel
+</Note>
+
+### Conversion Rates
+
+Track conversion rates at each stage:
+- **Campaign Participation Rate**: Leads in campaigns / Total leads
+- **Response Rate**: Leads responded / Leads in campaigns
+- **Conversion Rate**: Leads converted / Leads responded
+
+## Campaign Performance Metrics
+
+### Campaign Completion
+
+Percentage of contacts that completed the campaign:
+- All messages sent
+- Campaign finished without errors
+- Contacts processed successfully
+
+### Messages per Campaign
+
+Average number of messages sent per campaign, including:
+- Initial messages
+- Follow-up messages
+- Sequence messages
+
+### Top Performing Campaigns
+
+Campaigns ranked by:
+- Response rate
+- Conversion rate
+- Number of deals created
+- Total value generated
+
+## Source Metrics
+
+### Lead Sources
+
+Breakdown of where your leads come from:
+- **Campaign Sources**: Leads from specific campaigns
+- **Manual Import**: Leads imported via CSV or manual entry
+- **API**: Leads added via API integration
+- **Other**: Other sources
+
+<Info>
+  Understanding lead sources helps you identify the most effective channels for lead generation.
+</Info>
+
+## Interpreting Metrics
+
+### Healthy Metrics
+
+Signs of healthy outreach operations:
+- Consistent response rates
+- Low blocking rates
+- Steady lead growth
+- Increasing deal values
+
+### Warning Signs
+
+Metrics that may indicate issues:
+- Sudden drop in response rates
+- High blocking rates
+- Low delivery rates
+- Declining campaign performance
+
+### Optimization Opportunities
+
+Use metrics to identify:
+- Underperforming campaigns
+- High-value lead sources
+- Best-performing message types
+- Optimal sending times
+
+## Time-Based Analysis
+
+### Trend Analysis
+
+Compare metrics over time to identify:
+- Growth trends
+- Seasonal patterns
+- Performance improvements
+- Areas needing attention
+
+### Period Comparison
+
+Compare current period with previous periods to:
+- Measure growth
+- Identify improvements
+- Track progress toward goals
+- Adjust strategies
+
+## Best Practices
+
+1. **Regular Monitoring**: Check metrics daily or weekly
+2. **Set Goals**: Establish targets for key metrics
+3. **Track Trends**: Look for patterns over time
+4. **Take Action**: Use insights to optimize campaigns
+5. **Document Changes**: Note when you make changes and observe metric impacts
+

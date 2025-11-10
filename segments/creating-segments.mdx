@@ -1,0 +1,258 @@
+---
+title: "Creating Segments"
+description: "Step-by-step guide to creating segments in Reach"
+---
+
+## Creating a New Segment
+
+To create a segment, click the **"Create Segment"** button from the segments page.
+
+<Note>
+  Screenshot placeholder: Add a screenshot showing the "Create Segment" button
+</Note>
+
+## Step-by-Step Creation
+
+### Step 1: Basic Information
+
+#### Segment Name
+
+Enter a descriptive name for your segment. Good segment names:
+- Clearly identify the segment's purpose
+- Are easy to remember
+- Help team members understand the segment
+
+**Examples:**
+- "High Priority Leads"
+- "Campaign A Participants"
+- "US-Based Leads"
+- "Responded Last Week"
+
+#### Description
+
+Optionally add a description explaining:
+- Segment purpose
+- Why leads are included
+- How the segment is used
+- Notes for your team
+
+#### Color
+
+Choose a color to visually identify the segment:
+- Click the color picker
+- Select a color
+- Or enter a hex color code
+- Color appears in segment list and badges
+
+<Info>
+  Use colors to visually organize segments. For example, use green for high-priority segments and blue for geographic segments.
+</Info>
+
+### Step 2: Add Rules
+
+Rules define which leads belong to the segment. A lead must match ALL rules to be included.
+
+#### Adding a Rule
+
+1. Click **"Add Rule"** button
+2. Select the field to check
+3. Choose the operator
+4. Enter the value
+5. Rule is added to the segment
+
+<Note>
+  Screenshot placeholder: Add a screenshot showing the rule creation interface
+</Note>
+
+#### Rule Components
+
+**Field:**
+- What to check (source, status, custom field, etc.)
+- Select from dropdown
+- Includes standard and custom fields
+
+**Operator:**
+- How to compare (equals, contains, greater than, etc.)
+- Available operators depend on field type
+- Select from dropdown
+
+**Value:**
+- What to compare against
+- Enter value or select from options
+- Format depends on field type
+
+#### Multiple Rules
+
+Add multiple rules to create complex segments:
+- All rules must match (AND logic)
+- Each rule narrows the segment
+- More rules = more specific segment
+
+**Example:**
+- Rule 1: Source equals "Campaign A"
+- Rule 2: Status equals "Active"
+- Rule 3: Custom field "Priority" equals "High"
+- Result: Active leads from Campaign A with High priority
+
+### Step 3: Review and Save
+
+Before saving, review:
+- Segment name and description
+- All rules are correct
+- Rule values are accurate
+- Color is appropriate
+
+Click **"Create Segment"** to save. The segment will:
+- Be created immediately
+- Start calculating membership
+- Show member count when ready
+- Be available for campaigns
+
+## Rule Examples
+
+### Simple Rules
+
+**Source-based:**
+- Field: Source
+- Operator: Equals
+- Value: "Campaign A"
+
+**Status-based:**
+- Field: Status
+- Operator: Equals
+- Value: "Active"
+
+**Tag-based:**
+- Field: Tags
+- Operator: Contains
+- Value: "VIP"
+
+### Date-based Rules
+
+**Created Date:**
+- Field: Created Date
+- Operator: After
+- Value: "2024-01-01"
+
+**Last Contact:**
+- Field: Last Contact
+- Operator: Before
+- Value: "2024-12-31"
+
+### Custom Field Rules
+
+**Text Field:**
+- Field: Custom Field "Company"
+- Operator: Contains
+- Value: "Tech"
+
+**Number Field:**
+- Field: Custom Field "Revenue"
+- Operator: Greater Than
+- Value: "100000"
+
+**Dropdown Field:**
+- Field: Custom Field "Industry"
+- Operator: Equals
+- Value: "Software"
+
+### Campaign-based Rules
+
+**Campaign Participation:**
+- Field: Campaign Participation
+- Operator: Participated in
+- Value: [Select Campaign]
+
+**Campaign Response:**
+- Field: Campaign Response
+- Operator: Responded to
+- Value: [Select Campaign]
+
+## Complex Segments
+
+### Multiple Conditions
+
+Combine multiple rules for precise targeting:
+
+**Example: High-Value US Leads**
+- Rule 1: Country equals "US"
+- Rule 2: Custom Field "Revenue" greater than "50000"
+- Rule 3: Status equals "Active"
+- Rule 4: Tags contains "Enterprise"
+
+### Date Ranges
+
+Use date rules for time-based segments:
+
+**Example: Recent Leads**
+- Rule 1: Created Date after "2024-01-01"
+- Rule 2: Created Date before "2024-12-31"
+
+Or use "Between" operator:
+- Field: Created Date
+- Operator: Between
+- Value: "2024-01-01"
+- Value 2: "2024-12-31"
+
+## Testing Segments
+
+### After Creation
+
+Once created, segments automatically:
+- Calculate initial membership
+- Show member count
+- Update as lead data changes
+
+### Verify Membership
+
+1. Expand the segment
+2. View member list
+3. Check if expected leads are included
+4. Verify rules are working correctly
+
+### Adjust Rules
+
+If membership doesn't match expectations:
+1. Edit the segment
+2. Review rules
+3. Adjust rule values
+4. Refresh segment
+5. Verify again
+
+## Tips for Creating Segments
+
+1. **Start Simple**: Begin with basic rules, add complexity as needed
+2. **Test Rules**: Verify rules match expected leads
+3. **Use Descriptions**: Document segment purpose
+4. **Name Clearly**: Use descriptive names
+5. **Review Regularly**: Update segments as needs change
+6. **Monitor Size**: Watch segment size for performance
+
+## Common Mistakes
+
+1. **Too Many Rules**: Over-complicating segments
+2. **Wrong Operators**: Using incorrect operators for field types
+3. **Missing Values**: Not entering rule values
+4. **Unclear Names**: Using vague segment names
+5. **Not Testing**: Not verifying membership after creation
+
+## Next Steps
+
+After creating your segment:
+
+<Card
+  title="Segment Rules"
+  icon="filter"
+  href="/segments/segment-rules"
+>
+  Learn about all available rules and operators
+</Card>
+
+<Card
+  title="Managing Segments"
+  icon="settings"
+  href="/segments/managing-segments"
+>
+  Learn how to manage and optimize your segments
+</Card>
+

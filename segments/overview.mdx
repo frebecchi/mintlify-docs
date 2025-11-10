@@ -1,0 +1,292 @@
+---
+title: "Segments Overview"
+description: "Create dynamic lead lists with segments based on rules and conditions"
+---
+
+## What are Segments?
+
+Segments are dynamic lists of leads that automatically update based on rules and conditions you define. When leads match segment rules, they're automatically added to the segment. When they no longer match, they're removed.
+
+<Note>
+  Screenshot placeholder: Add a screenshot showing the segments list page
+</Note>
+
+## How Segments Work
+
+### Dynamic Membership
+
+Segments automatically include or exclude leads based on:
+- **Rules**: Conditions that leads must meet
+- **Real-time Updates**: Changes as lead data changes
+- **Automatic Refresh**: Regular updates to membership
+
+### Rule-Based
+
+Segments use rules to determine membership:
+- **Field**: What to check (source, status, custom field, etc.)
+- **Operator**: How to compare (equals, contains, greater than, etc.)
+- **Value**: What to compare against
+
+### Multiple Rules
+
+Segments can have multiple rules:
+- All rules must match (AND logic)
+- Leads matching all rules are included
+- Flexible rule combinations
+
+## Segment Components
+
+### Basic Information
+
+**Segment Name:**
+- Descriptive name identifying the segment
+- Shown in segment list
+- Used when selecting segments for campaigns
+
+**Description:**
+- Optional explanation of segment purpose
+- Helps team understand segment goals
+- Useful for documentation
+
+**Color:**
+- Visual identifier for the segment
+- Shown in segment list and badges
+- Helps distinguish segments
+
+### Rules
+
+Rules define segment membership:
+
+**Rule Structure:**
+- **Field**: What to check
+- **Operator**: Comparison method
+- **Value**: Comparison value
+
+**Example Rules:**
+- Source equals "Campaign A"
+- Status equals "Active"
+- Custom field "Priority" equals "High"
+- Created date after "2024-01-01"
+
+### Membership
+
+**Member Count:**
+- Number of leads currently in segment
+- Updates automatically
+- Shown in segment list
+
+**Members:**
+- List of leads in the segment
+- Can be viewed and exported
+- Updates as rules change
+
+## Segment Status
+
+### Active
+
+Segments that are:
+- Currently active
+- Updating membership
+- Available for campaigns
+- Showing member count
+
+### Inactive
+
+Segments that are:
+- Temporarily disabled
+- Not updating membership
+- Not available for campaigns
+- Preserving current members
+
+<Info>
+  Inactive segments preserve their current membership but don't update automatically. Reactivate to resume updates.
+</Info>
+
+## Use Cases
+
+### Targeted Campaigns
+
+Send campaigns to specific lead groups:
+- High-priority leads
+- Leads from specific sources
+- Leads with certain characteristics
+- Geographic segments
+
+### Lead Organization
+
+Organize leads automatically:
+- By status
+- By source
+- By custom field values
+- By engagement level
+
+### Analysis
+
+Analyze lead groups:
+- Compare segment performance
+- Identify high-value segments
+- Track segment growth
+- Measure conversion rates
+
+## Creating Segments
+
+### Basic Steps
+
+1. Click **"Create Segment"**
+2. Enter segment name and description
+3. Choose segment color
+4. Add rules defining membership
+5. Save segment
+6. Segment automatically populates
+
+<Card
+  title="Creating Segments"
+  icon="plus"
+  href="/segments/creating-segments"
+>
+  Learn step-by-step how to create segments
+</Card>
+
+## Segment Rules
+
+### Available Fields
+
+You can create rules based on:
+
+**Standard Fields:**
+- Source
+- Group name
+- Status
+- Priority
+- Tags
+- Country
+- Language
+
+**Campaign Fields:**
+- Campaign participation
+- Campaign exclusion
+- Campaign response
+
+**Date Fields:**
+- Created date
+- Last contact date
+
+**Custom Fields:**
+- Any custom field you've created
+- Supports all custom field types
+
+<Card
+  title="Segment Rules"
+  icon="filter"
+  href="/segments/segment-rules"
+>
+  Learn about all available rules and operators
+</Card>
+
+## Managing Segments
+
+### View Segments
+
+See all segments:
+- Segment name and description
+- Member count
+- Active/Inactive status
+- Rules summary
+- Actions menu
+
+### Edit Segments
+
+Modify segment configuration:
+- Update name and description
+- Change color
+- Add or remove rules
+- Change rule values
+- Activate/deactivate
+
+### Refresh Segments
+
+Manually refresh segment membership:
+- Recalculate membership
+- Update member count
+- Apply latest rules
+- Useful after data changes
+
+### Delete Segments
+
+Remove segments:
+- Permanently delete segment
+- Does not delete leads
+- Removes segment from campaigns
+- Cannot be undone
+
+<Warning>
+  Deleting a segment removes it from all campaigns using it. Make sure no active campaigns depend on the segment.
+</Warning>
+
+## Viewing Segment Members
+
+### Member List
+
+View leads in a segment:
+- Expand segment to see members
+- Table showing lead information
+- Search and filter members
+- Export member list
+
+### Member Information
+
+See details for each member:
+- Contact information
+- Custom field values
+- Campaign participation
+- Why they match segment
+
+<Note>
+  Screenshot placeholder: Add a screenshot showing expanded segment with member list
+</Note>
+
+## Organization View
+
+### My Segments
+
+View only segments you created. This is the default view.
+
+### All Organization Segments
+
+View segments from all organization members. Available to:
+- Organization owners
+- Organization admins
+
+**Features:**
+- See all organization segments
+- Filter by creator
+- View organization-wide segments
+- Note: Editing depends on ownership
+
+## Best Practices
+
+1. **Clear Names**: Use descriptive segment names
+2. **Document Rules**: Add descriptions explaining segment purpose
+3. **Test Rules**: Verify rules match expected leads
+4. **Regular Refresh**: Refresh segments after data changes
+5. **Monitor Size**: Watch segment size for performance
+6. **Review Regularly**: Update segments as needs change
+
+## Next Steps
+
+<Card
+  title="Creating Segments"
+  icon="plus"
+  href="/segments/creating-segments"
+>
+  Learn how to create your first segment
+</Card>
+
+<Card
+  title="Segment Rules"
+  icon="filter"
+  href="/segments/segment-rules"
+>
+  Understand all available rules and operators
+</Card>
+
