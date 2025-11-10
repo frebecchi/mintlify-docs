@@ -7,101 +7,103 @@
     "dark": "#03363d"
   },
   "favicon": "/favicon.svg",
-  "navigation": [
-    {
-      "group": "Getting Started",
-      "pages": [
-        "index",
-        "getting-started/overview",
-        "getting-started/authentication"
-      ]
-    },
-    {
-      "group": "Dashboard",
-      "pages": [
-        "dashboard/overview",
-        "dashboard/metrics",
-        "dashboard/charts"
-      ]
-    },
-    {
-      "group": "Campaigns",
-      "pages": [
-        "campaigns/overview",
-        "campaigns/creating-campaigns",
-        "campaigns/managing-campaigns",
-        "campaigns/campaign-statuses",
-        "campaigns/bulk-operations"
-      ]
-    },
-    {
-      "group": "Leads",
-      "pages": [
-        "leads/overview",
-        "leads/managing-leads",
-        "leads/custom-fields"
-      ]
-    },
-    {
-      "group": "Segments",
-      "pages": [
-        "segments/overview",
-        "segments/creating-segments",
-        "segments/segment-rules",
-        "segments/managing-segments"
-      ]
-    },
-    {
-      "group": "Deals",
-      "pages": [
-        "deals/overview",
-        "deals/pipeline",
-        "deals/managing-deals",
-        "deals/deal-fields",
-        "deals/deal-values"
-      ]
-    },
-    {
-      "group": "Sequences",
-      "pages": [
-        "sequences/overview",
-        "sequences/creating-sequences",
-        "sequences/managing-sequences"
-      ]
-    },
-    {
-      "group": "Telegram Accounts",
-      "pages": [
-        "accounts/overview",
-        "accounts/adding-accounts",
-        "accounts/phone-authentication",
-        "accounts/qr-authentication",
-        "accounts/managing-accounts"
-      ]
-    },
-    {
-      "group": "Security & Limits",
-      "pages": [
-        "security/overview",
-        "security/rate-limiting",
-        "security/best-practices"
-      ]
-    },
-    {
-      "group": "Analytics",
-      "pages": [
-        "analytics/overview"
-      ]
-    },
-    {
-      "group": "Organizations",
-      "pages": [
-        "organizations/overview",
-        "organizations/permissions",
-        "organizations/managing-organizations"
-      ]
-    }
-  ],
+  "navigation": {
+    "groups": [
+      {
+        "group": "Getting Started",
+        "pages": [
+          "index",
+          "getting-started/overview",
+          "getting-started/authentication"
+        ]
+      },
+      {
+        "group": "Dashboard",
+        "pages": [
+          "dashboard/overview",
+          "dashboard/metrics",
+          "dashboard/charts"
+        ]
+      },
+      {
+        "group": "Campaigns",
+        "pages": [
+          "campaigns/overview",
+          "campaigns/creating-campaigns",
+          "campaigns/managing-campaigns",
+          "campaigns/campaign-statuses",
+          "campaigns/bulk-operations"
+        ]
+      },
+      {
+        "group": "Leads",
+        "pages": [
+          "leads/overview",
+          "leads/managing-leads",
+          "leads/custom-fields"
+        ]
+      },
+      {
+        "group": "Segments",
+        "pages": [
+          "segments/overview",
+          "segments/creating-segments",
+          "segments/segment-rules",
+          "segments/managing-segments"
+        ]
+      },
+      {
+        "group": "Deals",
+        "pages": [
+          "deals/overview",
+          "deals/pipeline",
+          "deals/managing-deals",
+          "deals/deal-fields",
+          "deals/deal-values"
+        ]
+      },
+      {
+        "group": "Sequences",
+        "pages": [
+          "sequences/overview",
+          "sequences/creating-sequences",
+          "sequences/managing-sequences"
+        ]
+      },
+      {
+        "group": "Telegram Accounts",
+        "pages": [
+          "accounts/overview",
+          "accounts/adding-accounts",
+          "accounts/phone-authentication",
+          "accounts/qr-authentication",
+          "accounts/managing-accounts"
+        ]
+      },
+      {
+        "group": "Security & Limits",
+        "pages": [
+          "security/overview",
+          "security/rate-limiting",
+          "security/best-practices"
+        ]
+      },
+      {
+        "group": "Analytics",
+        "pages": [
+          "analytics/overview"
+        ]
+      },
+      {
+        "group": "Organizations",
+        "pages": [
+          "organizations/overview",
+          "organizations/permissions",
+          "organizations/managing-organizations"
+        ]
+      }
+    ]
+  },
   "logo": {
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
