@@ -1,0 +1,197 @@
+---
+title: "Rate Limiting"
+description: "Understanding and configuring rate limits for Telegram accounts"
+---
+
+## Rate Limiting Overview
+
+Rate limiting helps protect your Telegram accounts by controlling how many messages can be sent per time period, preventing account restrictions and ensuring compliance with Telegram's terms of service.
+
+## Understanding Rate Limits
+
+### Why Rate Limits Matter
+
+Rate limits protect your accounts by:
+- Preventing account restrictions from Telegram
+- Avoiding spam detection
+- Maintaining account health
+- Ensuring sustainable outreach
+
+### Types of Limits
+
+**Daily Limits:**
+- Maximum messages per day per account
+- Resets daily at midnight (account timezone)
+- Prevents overuse in single day
+
+**Hourly Limits:**
+- Maximum messages per hour per account
+- Rolling window (last 60 minutes)
+- Prevents burst sending
+
+**Per-Minute Limits:**
+- Maximum messages per minute
+- Telegram-enforced limits
+- Automatic compliance
+
+## Configuring Rate Limits
+
+### Accessing Rate Limit Settings
+
+1. Navigate to **Security Limits** page
+2. View all connected accounts
+3. Configure limits per account
+4. Save settings
+
+<Note>
+  Screenshot placeholder: Add a screenshot of the Security Limits configuration page
+</Note>
+
+### Setting Daily Limits
+
+Configure maximum messages per day:
+1. Select account
+2. Set daily limit value
+3. Consider account age and history
+4. Save configuration
+
+**Recommended Limits:**
+- New accounts: 50-100 messages/day
+- Established accounts: 200-500 messages/day
+- Varies by account age and Telegram's limits
+
+### Setting Hourly Limits
+
+Configure maximum messages per hour:
+1. Select account
+2. Set hourly limit value
+3. Ensure hourly × 24 doesn't exceed daily limit
+4. Save configuration
+
+**Recommended Limits:**
+- New accounts: 5-10 messages/hour
+- Established accounts: 20-50 messages/hour
+
+## Monitoring Limits
+
+### Usage Tracking
+
+Monitor your usage:
+- **Messages Sent Today**: Current daily usage
+- **Messages Sent This Hour**: Current hourly usage
+- **Remaining Quota**: How many messages left
+- **Limit Warnings**: Alerts when approaching limits
+
+### Limit Warnings
+
+Receive warnings when:
+- 80% of daily limit reached
+- 80% of hourly limit reached
+- Limit exceeded
+- Account at risk
+
+<Warning>
+  Exceeding rate limits may result in temporary account restrictions from Telegram. Monitor usage closely.
+</Warning>
+
+## Account-Specific Limits
+
+### Different Limits Per Account
+
+Each account can have different limits:
+- **New Accounts**: Lower limits for safety
+- **Established Accounts**: Higher limits
+- **Account Age**: Older accounts can handle more
+- **Account Health**: Healthy accounts can send more
+
+### Adjusting Limits
+
+Gradually increase limits:
+1. Start with conservative limits
+2. Monitor account health
+3. Gradually increase if stable
+4. Don't increase too quickly
+
+## Best Practices
+
+### Limit Management
+
+1. **Start Conservative**: Begin with lower limits
+2. **Monitor Closely**: Watch usage and account health
+3. **Increase Gradually**: Slowly raise limits over time
+4. **Use Multiple Accounts**: Distribute load across accounts
+5. **Respect Warnings**: Heed limit warnings
+
+### Account Protection
+
+1. **Stay Within Limits**: Never exceed configured limits
+2. **Monitor Health**: Check account status regularly
+3. **Distribute Load**: Use multiple accounts
+4. **Watch for Restrictions**: Monitor for Telegram restrictions
+5. **Adjust as Needed**: Modify limits based on performance
+
+## Telegram's Limits
+
+### Understanding Telegram Limits
+
+Telegram enforces its own limits:
+- Not publicly documented
+- Varies by account age
+- Varies by account type
+- Enforced automatically
+
+### Compliance
+
+Reach helps you comply by:
+- Enforcing your configured limits
+- Monitoring usage
+- Providing warnings
+- Preventing violations
+
+## Troubleshooting
+
+### Limit Reached
+
+If you hit a rate limit:
+1. Wait for limit to reset (hourly or daily)
+2. Check limit configuration
+3. Consider increasing limits (gradually)
+4. Use additional accounts
+5. Distribute message load
+
+### Account Restricted
+
+If Telegram restricts your account:
+1. Check rate limit compliance
+2. Review account health
+3. Wait for restriction to lift (usually 24-48 hours)
+4. Reduce sending volume
+5. Contact support if persistent
+
+### Limits Too Low
+
+If limits are too restrictive:
+1. Gradually increase limits
+2. Monitor account health
+3. Test with small increases
+4. Don't increase too quickly
+5. Consider account age
+
+## Related Topics
+
+<Card
+  title="Security Overview"
+  icon="shield"
+  href="/security/overview"
+>
+  Learn about security features in Reach
+</Card>
+
+<Card
+  title="Best Practices"
+  icon="shield-check"
+  href="/security/best-practices"
+>
+  Security best practices for using Reach
+</Card>
+

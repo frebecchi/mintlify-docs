@@ -110,5 +110,15 @@
   "footerSocials": {
     "github": "https://github.com",
     "linkedin": "https://linkedin.com"
+  },
+  "topbarLinks": [
+    {
+      "name": "Support",
+      "url": "mailto:support@reach.com"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Dashboard",
+    "url": "https://app.reach.com"
   }
 }
