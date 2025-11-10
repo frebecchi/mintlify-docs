@@ -1,234 +1,459 @@
 ---
 title: "Campaigns Overview"
-description: "Learn about campaigns and how they work in Reach"
+description: "Comprehensive guide to understanding campaigns, their architecture, and processing logic"
 ---
 
 ## What are Campaigns?
 
-Campaigns are automated messaging workflows that send messages to your leads through Telegram. A campaign defines:
+Campaigns are automated messaging workflows that send personalized messages to leads through Telegram. Each campaign processes leads individually (lead-by-lead), executing a flow of nodes that can send messages, wait for delays, evaluate conditions, and respond to user interactions.
 
-- **Target Audience**: Which leads or segments to contact
-- **Message Flow**: The sequence of messages and actions
-- **Sending Schedule**: When and how messages are sent
-- **Telegram Account**: Which account to use for sending
+## Campaign Architecture
 
-<Note>
-  Screenshot placeholder: Add a screenshot showing the campaigns list page
-</Note>
+### Core Components
 
-## Campaign Components
+**Campaign Flow (`campaign_flows` table):**
+- Defines the visual workflow (nodes and edges)
+- Stores campaign metadata (name, description, status, timezone)
+- Contains A/B test configuration and variations
+- Links to Telegram account for sending messages
 
-### Campaign Name
+**Flow Execution (`flow_executions` table):**
+- One execution per lead in the campaign
+- Tracks individual lead progress through the flow
+- Stores execution context (variables, node states)
+- Maintains status: `pending`, `running`, `waiting`, `completed`, `responded`, `failed`, `paused`, `cancelled`
 
-A descriptive name for your campaign. Use names that clearly identify the campaign's purpose, such as:
-- "Product Launch - Q1 2024"
-- "Welcome Sequence - New Users"
-- "Follow-up - No Response"
+**Execution Logs (`flow_execution_logs` table):**
+- Audit trail of every node execution
+- Records input/output data, status, timestamps
+- Used for statistics and debugging
 
-### Description
+**Messages (`messages` table):**
+- Stores all sent and received messages
+- Links to execution and campaign for tracking
+- Tracks delivery status and A/B test variation
 
-Optional description providing additional context about the campaign. Useful for:
-- Documenting campaign goals
-- Notes for team members
-- Campaign history
+### Processing Model
 
-### Telegram Account
+Campaigns use a **worker-based architecture**:
 
-The Telegram account used to send messages. You must:
-- Connect at least one Telegram account before creating campaigns
-- Select which account to use for each campaign
-- Ensure the account is healthy and connected
-
-<Warning>
-  Campaigns cannot send messages if the associated Telegram account is disconnected or unhealthy.
-</Warning>
-
-### Flow Configuration
-
-The visual workflow defining:
-- **Start Node**: When the campaign begins (immediate or scheduled)
-- **Message Nodes**: Messages to send
-- **Delay Nodes**: Wait periods between messages
-- **Condition Nodes**: Conditional logic based on responses
-- **End Node**: Campaign completion
-
-<Note>
-  Screenshot placeholder: Add a screenshot of the campaign flow builder
-</Note>
+1. **UnifiedWorker** runs continuously, polling for pending executions
+2. Each execution is processed independently (lead-by-lead)
+3. Workers use Redis locks to prevent concurrent processing of the same execution
+4. Rate limiting is enforced per Telegram account to prevent FloodWaitError
+5. Response detection runs automatically, checking for replies every 60 seconds
 
 ## Campaign Statuses
 
-Campaigns can have different statuses:
-
 ### Draft
-
-Campaigns that are created but not yet launched. Draft campaigns:
+- Campaign created but not launched
 - Can be edited freely
-- Are not active
-- Do not send messages
-- Can be deleted
-
-### Active
-
-Campaigns that are currently running. Active campaigns:
-- Are sending messages to leads
-- Cannot be edited (must be paused first)
-- Show real-time progress
-- Can be paused or stopped
-
-### Paused
-
-Campaigns that were active but are temporarily stopped. Paused campaigns:
-- Stop sending new messages
-- Can be resumed
-- Can be edited
-- Preserve progress
-
-### Completed
-
-Campaigns that have finished processing all contacts. Completed campaigns:
-- Have sent all messages
-- Cannot be restarted
-- Can be duplicated
-- Show final statistics
-
-### Cancelled
-
-Campaigns that were stopped before completion. Cancelled campaigns:
-- Were stopped manually
-- May have partially sent messages
-- Cannot be restarted
-- Can be duplicated
+- No executions created yet
 
 ### Scheduled
+- Campaign set to start at a specific date/time
+- Timezone-aware: scheduled time is stored in UTC but displayed in campaign's timezone
+- Automatically transitions to `active` when scheduled time is reached
 
-Campaigns set to start at a specific date and time. Scheduled campaigns:
-- Are waiting to start
-- Can be edited before start time
-- Will automatically become active at the scheduled time
-- Can be cancelled before starting
+### Active
+- Campaign is running and processing executions
+- Workers pick up pending executions and process them
+- Cannot edit flow configuration (must pause first)
+- New leads can be added dynamically
 
-### Tracking
+### Paused
+- Campaign temporarily stopped
+- All active executions are paused
+- Can be resumed (executions continue from where they stopped)
+- Flow configuration can be edited
 
-Campaigns that are tracking responses but not actively sending. Tracking campaigns:
-- Monitor for responses
-- May send follow-up messages
-- Are in a monitoring state
+### Completed
+- All executions have finished (completed, responded, or failed)
+- Campaign automatically transitions to completed when no active executions remain
+- Can be reactivated by adding new leads (status changes back to `active`)
 
-## Campaign Enable/Disable
+### Cancelled
+- Campaign was stopped manually
+- All pending executions are cancelled
+- Cannot be resumed (must duplicate to restart)
 
-Campaigns can be enabled or disabled:
+## Permissions
 
-- **Enabled**: Campaign can be launched and will execute normally
-- **Disabled**: Campaign cannot be launched and any active executions are cancelled
+### Organization Context
 
-<Info>
-  Disabling a campaign immediately cancels all pending executions. Use this to quickly stop a campaign without deleting it.
-</Info>
+Campaigns respect organization isolation:
 
-## View Modes
+**Personal Mode (no organization):**
+- Users can only see/edit campaigns with `organization_id = NULL`
+- Complete isolation from organization data
 
-### My Campaigns
+**Organization Mode:**
+- Campaigns belong to organization (`organization_id` set)
+- Access controlled by role and `admin_view_enabled` setting
 
-View only campaigns you created. This is the default view for regular users.
+### Role-Based Permissions
 
-### All Organization Campaigns
+**Owner:**
+- Can view all organization campaigns (if `admin_view_enabled = true`)
+- Can edit any organization campaign (regardless of status)
+- Can delete any organization campaign
+- Full control over campaign lifecycle
 
-View campaigns from all organization members. Available only to:
-- Organization owners
-- Organization admins
+**Admin:**
+- Can view all organization campaigns (if `admin_view_enabled = true`)
+- Can edit any organization campaign (regardless of status)
+- Can delete any organization campaign
+- Cannot change organization owner
 
-<Note>
-  You can only edit campaigns you created, unless you're an organization owner/admin with special permissions.
-</Note>
+**Member:**
+- Can only view own campaigns (even if `admin_view_enabled = true`)
+- Can edit own campaigns (if status allows)
+- Can delete own campaigns
+- Cannot view/edit other members' campaigns
 
-## Campaign List Features
+### Status-Based Edit Restrictions
 
-### Search
+Even with proper permissions, editing is restricted by status:
 
-Search campaigns by name or description. The search is case-insensitive and searches across:
-- Campaign names
-- Campaign descriptions
+**Can Edit Flow Configuration:**
+- `draft` - Always editable
+- `paused` - Editable
+- `scheduled` - Editable (before start time)
 
-### Filters
+**Cannot Edit Flow Configuration:**
+- `active` - Must pause first (prevents mid-execution changes)
+- `completed` - Cannot edit (historical record)
+- `cancelled` - Cannot edit (historical record)
 
-Filter campaigns by:
-- **Status**: Draft, Active, Paused, Completed, Cancelled, Scheduled, Tracking
-- **Sender**: Filter by Telegram account
-- **Tags**: Filter by campaign tags (if configured)
-- **Creator**: Filter by who created the campaign (organization view)
+**Note:** Basic metadata (name, description, Telegram account) can be updated even when flow is locked.
 
-### Sorting
+## Campaign Processing
 
-Sort campaigns by:
-- **Name**: Alphabetical order
-- **Status**: Status priority
-- **Completed Contacts**: Number of contacts completed
-- **Total Contacts**: Total number of contacts
-- **Sender**: Telegram account name
-- **Created At**: Creation date
+### Execution Flow
 
-### Bulk Operations
+1. **Campaign Started:**
+   - Status changes to `active`
+   - Executions created for each lead (status: `pending`)
+   - `next_execution_at` set to `now()` for immediate processing
 
-Select multiple campaigns to perform bulk actions:
-- **Enable**: Enable selected campaigns
-- **Disable**: Disable selected campaigns
-- **Launch**: Start selected campaigns
-- **Stop**: Stop selected campaigns
-- **Delete**: Delete selected campaigns
+2. **Worker Picks Up Execution:**
+   - UnifiedWorker queries for executions where `next_execution_at <= now()`
+   - Acquires Redis lock to prevent concurrent processing
+   - Loads campaign flow, contact, and execution context
 
-<Warning>
-  Bulk delete cannot be undone. Make sure you want to delete the selected campaigns.
-</Warning>
+3. **Node Execution:**
+   - Processes current node based on type:
+     - **START**: Initializes execution, moves to first node
+     - **SEND_MESSAGE**: Sends message with rate limiting, tag replacement, spintax
+     - **WAIT**: Calculates next execution time, sets status to `waiting`
+     - **CONDITION**: Evaluates condition, branches to appropriate path
+     - **END**: Marks execution as `completed`
 
-## Campaign Progress
+4. **After Node Execution:**
+   - Updates execution context (variables, current_node_id)
+   - Creates execution log entry (audit trail)
+   - Calculates next node and `next_execution_at`
+   - Releases Redis lock
 
-Each campaign shows progress indicators:
+5. **Execution Completion:**
+   - When execution reaches END node or fails
+   - Status changes to `completed`, `responded`, or `failed`
+   - Campaign checks if all executions are done → auto-completes campaign
 
-- **Completed Contacts**: Number of contacts that completed the campaign
-- **Total Contacts**: Total number of contacts in the campaign
-- **Progress Bar**: Visual representation of completion percentage
+### Rate Limiting
 
-<Note>
-  Screenshot placeholder: Add a screenshot showing campaign progress indicators
-</Note>
+Rate limiting prevents Telegram FloodWaitError:
 
-## Quick Actions
+**Per-Account Limits:**
+- Cooldown between messages: 30-60 seconds (with 20-40% jitter)
+- Daily message limits: Configurable per account profile
+- Hourly message limits: Configurable per account profile
 
-From the campaign list, you can:
+**Intelligent Cooldown:**
+- Workers check rate limit before sending
+- If cooldown active, execution waits and retries later
+- `next_execution_at` adjusted to respect cooldown
 
-- **Create Campaign**: Start a new campaign
-- **Edit**: Modify campaign settings and flow
-- **Launch**: Start an inactive campaign
-- **Pause**: Temporarily stop an active campaign
-- **Stop**: Immediately stop a campaign
-- **Duplicate**: Create a copy of the campaign
-- **Delete**: Remove the campaign permanently
+**Account Profiles:**
+- `conservative`: Lower limits, safer for new accounts
+- `moderate`: Balanced limits
+- `aggressive`: Higher limits (use with caution)
+
+### Timezone Handling
+
+Campaigns are timezone-aware:
+
+**Scheduled Campaigns:**
+- `scheduled_start_at` stored in UTC
+- `timezone` field stores campaign's timezone (e.g., "America/Sao_Paulo")
+- Worker converts UTC to campaign timezone for comparison
+- Ensures campaigns start at correct local time
+
+**Wait Nodes:**
+- Duration-based waits are timezone-agnostic (relative)
+- Response-based waits use UTC timestamps
+
+### Response Detection
+
+Automatic response detection stops sending when lead replies:
+
+**Detection Process:**
+1. UnifiedWorker checks for responses every 60 seconds
+2. Queries Telegram API for messages after last sent message timestamp
+3. If response found:
+   - Execution status → `responded`
+   - `response_detected_at` timestamp recorded
+   - `response_text` stored (first 500 chars)
+   - Last sent message marked as delivered (response = proof of delivery)
+   - No further messages sent to this lead
+
+**Response Timeout:**
+- Configurable per campaign (`response_timeout_hours`)
+- If no response after timeout, execution continues
+- Default: No timeout (waits indefinitely)
+
+**Pause on Response:**
+- Campaign setting: `pause_on_response`
+- If enabled, execution stops immediately when response detected
+- If disabled, execution completes current node before stopping
+
+## Flow Builder
+
+### Node Types
+
+**START Node:**
+- Entry point of campaign
+- Defines start type: `immediate` or `scheduled`
+- For scheduled: requires `scheduled_start_at` and `timezone`
+
+**SEND_MESSAGE Node:**
+- Sends text message (with optional media)
+- Processes spintax and dynamic tags
+- Enforces rate limiting
+- Creates message record and execution log
+
+**WAIT Node:**
+- Duration-based: waits specified time (days/hours/minutes)
+- Response-based: waits for lead response with timeout
+- Sets `next_execution_at` for future processing
+
+**CONDITION Node:**
+- Evaluates condition based on execution context
+- Branches to different paths based on result (`yes`/`no`)
+- Uses edges with `condition` field to route flow
+
+**END Node:**
+- Marks execution as completed
+- Campaign checks if all executions done → auto-completes
+
+### Flow Configuration
+
+**Nodes Array:**
+- Ordered list of all nodes in flow
+- Each node has: `id`, `type`, `data`, `position`
+
+**Edges Array:**
+- Defines connections between nodes
+- Sequential edges: connect nodes in order
+- Conditional edges: connect condition nodes to branches (`condition: "yes"` or `"no"`)
+
+**Processing Logic:**
+- Nodes processed sequentially by array order
+- Edges used only for condition branching
+- If no edges, nodes processed in array order
+
+## Dynamic Tags
+
+### Tag Replacement
+
+Tags are replaced with actual values before sending:
+
+**Basic Tags:**
+- `{firstName}` → Contact's first name
+- `{lastName}` → Contact's last name
+- `{username}` → Telegram username (without @)
+- `{phoneNumber}` → Phone number
+- `{groupName}` → Group name (if contact from group)
+
+**Custom Field Tags:**
+- `{cf-fieldName}` → Custom field value
+- Example: `{cf-companyName}` → "Acme Corp"
+
+**Fallback Values:**
+- Format: `{tag|fallback}`
+- If tag value missing, uses fallback
+- Example: `{firstName|Guest}` → "John" or "Guest"
+
+**Processing Order:**
+1. Spintax processed first (variations resolved)
+2. Tags replaced second (with fallbacks)
+3. Final message sent
+
+### Spintax
+
+Spintax allows message variations:
+
+**Syntax:**
+- `{option1|option2|option3}`
+- Example: `{Hi|Hello|Hey} {firstName}`
+
+**Consistency:**
+- Same lead always gets same variation (deterministic)
+- Uses hash of `contact_id` as seed
+- Ensures consistent experience per lead
+
+**Nested Spintax:**
+- Supports nested variations: `{Hi|Hello} {there|here}`
+- Processed recursively until all resolved
+
+**Distinction from Tags:**
+- Spintax: 3+ options → random selection
+- Tag with fallback: 2 options → data replacement
+- Processor distinguishes automatically
+
+## A/B Testing
+
+### Configuration
+
+**Variations:**
+- Multiple flow configurations (A, B, C, etc.)
+- Each variation has independent nodes/edges
+- Variations can be enabled/disabled independently
+
+**Selection:**
+- Deterministic: Same lead always gets same variation
+- Uses hash of `contact_id` for consistency
+- Weighted distribution: Configurable weights per variation
+
+**Optimization:**
+- Automatic optimization based on performance metrics
+- Compares response rates between variations
+- Adjusts weights to favor better-performing variations
+- Threshold: `ab_test_optimization_threshold` (default: 0.1 = 10%)
+
+**Statistics:**
+- Tracked per variation: messages sent, responses, response rate
+- Updated every 5 minutes by worker
+- Available via `/campaign-flows/{id}/ab-statistics` endpoint
+
+## Statistics
+
+### Real-Time Metrics
+
+**Execution Metrics:**
+- `total_contacts`: Total leads in campaign
+- `contacts_started`: Executions that began processing
+- `contacts_completed`: Executions that finished successfully
+- `contacts_failed`: Executions that failed
+- `contacts_active`: Currently processing executions
+- `contacts_responded`: Leads who replied
+
+**Message Metrics:**
+- `messages_sent`: Total messages sent
+- `messages_failed`: Failed send attempts
+- `messages_delivered`: Confirmed deliveries
+- `messages_not_sent`: Pending sends
+
+**Rates:**
+- `completion_rate`: (completed / total) × 100
+- `response_rate`: (responded / delivered) × 100
+- `delivery_rate`: (delivered / sent) × 100
+
+**Calculation:**
+- Statistics computed by database function (`get_campaign_statistics`)
+- Cached for performance (refreshed every 5 minutes)
+- Available via `/campaign-flows/{id}/statistics` endpoint
+
+## Audit Logs
+
+### Execution Logs
+
+Every node execution creates a log entry:
+
+**Log Fields:**
+- `node_type`: Type of node executed
+- `status`: `completed`, `failed`, `skipped`
+- `executed_at`: Timestamp of execution
+- `input_data`: Input context (contact info, message template)
+- `output_data`: Output result (sent message, contact info)
+- `error_message`: Error details if failed
+
+**Log Types:**
+- `sendMessage`: Message sent to lead
+- `wait`: Wait period started
+- `condition`: Condition evaluated
+- `delivery`: Delivery status checked
+- `response_detection`: Response check performed
+
+**Access:**
+- Available via `/campaign-flows/{id}/logs` endpoint
+- Filtered by execution for lead-specific view
+- Used for debugging and compliance
+
+## When Campaigns Stop
+
+### Automatic Completion
+
+Campaign automatically stops when:
+1. All executions reach terminal status (`completed`, `responded`, `failed`, `cancelled`)
+2. No pending/running/waiting executions remain
+3. Status changes to `completed`
+
+### Manual Stopping
+
+**Pause:**
+- Temporarily stops processing
+- Executions paused (can be resumed)
+- Status: `paused`
+
+**Stop:**
+- Immediately cancels all active executions
+- Status: `cancelled`
+- Cannot be resumed (must duplicate)
+
+**Disable:**
+- Toggles `enabled` flag to `false`
+- Cancels all active executions immediately
+- Prevents new launches
+- Different from pause (cannot launch when disabled)
+
+### Response Detection
+
+If `pause_on_response = true`:
+- Execution stops immediately when response detected
+- Status: `responded`
+- No further messages sent
+
+## Fallback Mechanisms
+
+### Message Sending Fallback
+
+If primary `chat_id` fails:
+1. Tries `telegram_user_id` (if available)
+2. Tries `phone_number` (if available)
+3. Tries `username` (if available)
+4. If all fail, execution marked as `failed`
+
+### Tag Fallback
+
+If tag value missing:
+- Uses fallback value if specified: `{tag|fallback}`
+- Otherwise, tag left as-is (prevents broken messages)
+
+### Rate Limit Fallback
+
+If rate limit exceeded:
+- Execution waits for cooldown period
+- `next_execution_at` adjusted
+- Retries automatically on next worker cycle
 
 ## Best Practices
 
-1. **Name Clearly**: Use descriptive names that identify campaign purpose
-2. **Test First**: Create test campaigns with small audiences before full launch
-3. **Monitor Progress**: Regularly check campaign progress and statistics
-4. **Respect Limits**: Be aware of Telegram rate limits to avoid account issues
-5. **Organize**: Use descriptions and tags to organize campaigns
-6. **Document**: Add descriptions explaining campaign goals and strategy
-
-## Next Steps
-
-<Card
-  title="Creating Campaigns"
-  icon="plus"
-  href="/campaigns/creating-campaigns"
->
-  Learn how to create your first campaign
-</Card>
-
-<Card
-  title="Managing Campaigns"
-  icon="settings"
-  href="/campaigns/managing-campaigns"
->
-  Learn how to manage and optimize your campaigns
-</Card>
-
+1. **Start Small**: Test with small audience before full launch
+2. **Monitor Rate Limits**: Watch account health and rate limit usage
+3. **Use Fallbacks**: Always provide fallback values for tags
+4. **Test Flow**: Review flow visually before launching
+5. **Respect Timezones**: Set correct timezone for scheduled campaigns
+6. **Monitor Responses**: Check response rates and adjust messaging
+7. **Use A/B Testing**: Test variations to optimize performance
+8. **Review Logs**: Check audit logs for debugging and compliance

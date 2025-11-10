@@ -1,149 +1,225 @@
 ---
 title: "Campaign Statuses"
-description: "Understanding campaign statuses and when they apply"
+description: "Complete guide to campaign statuses, transitions, and status-based rules"
 ---
 
-## Campaign Status Overview
+## Status Overview
 
-Campaigns in Reach have different statuses that indicate their current state. Understanding these statuses helps you manage your campaigns effectively.
+Campaigns have seven possible statuses that indicate their current state and determine what actions are allowed. Understanding statuses is crucial for effective campaign management.
 
 ## Status Types
 
 ### Draft
 
-**When:** Campaign is created but not yet launched
+**When:** Campaign is created but not yet launched.
 
 **Characteristics:**
-- Can be edited freely
-- Not active
-- Not sending messages
+- Created but not active
+- No executions created yet (or executions exist but not started)
+- Can be edited freely (flow configuration, settings)
 - Can be deleted
-- Can be launched
+- Cannot send messages
+
+**State:**
+- `status = "draft"`
+- `enabled = true` (default)
+- Executions: None or all `pending` with `next_execution_at` in future
 
 **Actions Available:**
-- Edit campaign
+- Edit campaign (full access)
 - Launch campaign
 - Delete campaign
 - Duplicate campaign
+- Add/remove contacts
 
-<Note>
-  Screenshot placeholder: Add a screenshot showing a Draft campaign badge
-</Note>
+**Transitions:**
+- → `active`: When launched (immediate start)
+- → `scheduled`: When launched with scheduled start time
+- → `cancelled`: When deleted (soft delete)
+
+### Scheduled
+
+**When:** Campaign is set to start at a specific date/time.
+
+**Characteristics:**
+- Waiting for scheduled start time
+- Timezone-aware: Scheduled time stored in UTC, displayed in campaign timezone
+- Worker checks every 30 seconds for scheduled campaigns
+- Can be edited before start time
+- Cannot send messages until scheduled time reached
+
+**State:**
+- `status = "scheduled"`
+- `start_type = "scheduled"`
+- `scheduled_start_at`: UTC timestamp
+- `timezone`: Campaign timezone (e.g., "America/Sao_Paulo")
+- Executions: Created but `next_execution_at` set to scheduled time
+
+**Actions Available:**
+- Edit campaign (before start time)
+- Cancel scheduled start (changes to `draft`)
+- Delete campaign
+- View schedule details
+
+**Transitions:**
+- → `active`: Automatically when scheduled time reached
+- → `draft`: When scheduled start cancelled
+- → `cancelled`: When deleted
+
+**Timezone Handling:**
+- Scheduled time converted from UTC to campaign timezone for display
+- Worker compares current UTC time with scheduled UTC time
+- Ensures campaigns start at correct local time
 
 ### Active
 
-**When:** Campaign is currently running and sending messages
+**When:** Campaign is currently running and processing executions.
 
 **Characteristics:**
-- Sending messages to contacts
-- Cannot be edited (must pause first)
-- Shows real-time progress
-- Can be paused or stopped
+- Sending messages to leads
+- Workers processing executions
+- Real-time progress updates
+- Cannot edit flow configuration (must pause first)
+- Can add/remove contacts dynamically
+
+**State:**
+- `status = "active"`
+- `enabled = true` (required)
+- Executions: Mix of `pending`, `running`, `waiting`, `completed`, `responded`, `failed`
+- Worker actively processing executions
 
 **Actions Available:**
 - Pause campaign
 - Stop campaign
-- View statistics
+- View statistics (real-time)
 - View progress
+- Add/remove contacts
+- Edit basic metadata (name, description, Telegram account)
+- Cannot edit flow configuration
 
-<Info>
-  Active campaigns show live progress updates as messages are sent.
-</Info>
+**Transitions:**
+- → `paused`: When paused manually
+- → `completed`: Automatically when all executions finished
+- → `cancelled`: When stopped manually
+- → `active`: When reactivated after adding contacts to completed campaign
+
+**Processing:**
+- Worker picks up pending executions
+- Processes nodes sequentially
+- Updates execution status and `next_execution_at`
+- Creates execution logs for audit trail
 
 ### Paused
 
-**When:** Campaign was active but temporarily stopped
+**When:** Campaign was active but temporarily stopped.
 
 **Characteristics:**
 - Not sending new messages
-- Preserves progress
+- All active executions paused
+- Progress preserved (executions resume from same point)
+- Can be edited (flow configuration unlocked)
 - Can be resumed
-- Can be edited
-- Can be stopped
+
+**State:**
+- `status = "paused"`
+- `enabled = true` (can be `false` if also disabled)
+- Executions: Mix of `paused`, `waiting`, `completed`, `responded`, `failed`
+- `next_execution_at` preserved for paused executions
 
 **Actions Available:**
 - Resume/Launch campaign
-- Edit campaign
+- Edit campaign (full access)
 - Stop campaign
 - Delete campaign
+- Add/remove contacts
 
-<Note>
-  Pausing preserves all progress. When resumed, the campaign continues from where it left off.
-</Note>
+**Transitions:**
+- → `active`: When resumed/launched
+- → `cancelled`: When stopped
+- → `draft`: When flow edited significantly (rare)
+
+**Resume Behavior:**
+- Paused executions resume (status: `pending`)
+- `next_execution_at` unchanged (continues from same point)
+- No progress lost
 
 ### Completed
 
-**When:** Campaign has finished processing all contacts
+**When:** Campaign has finished processing all contacts.
 
 **Characteristics:**
-- All messages sent
-- All contacts processed
-- Cannot be restarted
+- All executions reached terminal status
+- No pending/running/waiting executions
 - Shows final statistics
-- Can be duplicated
+- Cannot be restarted (must duplicate)
+- Can be reactivated by adding contacts
+
+**State:**
+- `status = "completed"`
+- `enabled = true` (can be `false`)
+- Executions: All `completed`, `responded`, `failed`, or `cancelled`
+- No active executions remaining
 
 **Actions Available:**
-- View statistics
+- View statistics (final)
 - Duplicate campaign
 - Delete campaign
+- Add contacts (reactivates to `active`)
+- Cannot edit flow configuration
+- Cannot restart
 
-<Info>
-  Completed campaigns provide final statistics and can be used as templates for new campaigns.
-</Info>
+**Transitions:**
+- → `active`: When contacts added (automatic reactivation)
+- → `cancelled`: When deleted (soft delete)
+
+**Auto-Completion:**
+- Campaign automatically transitions to `completed` when:
+  1. All executions reach terminal status
+  2. No pending/running/waiting executions remain
+  3. Worker detects completion and updates status
 
 ### Cancelled
 
-**When:** Campaign was stopped before completion
+**When:** Campaign was stopped before completion.
 
 **Characteristics:**
-- Stopped manually
+- Stopped manually (not natural completion)
+- All active executions cancelled
 - May have partially sent messages
-- Cannot be restarted
-- Shows partial statistics
-- Can be duplicated
+- Cannot be restarted (must duplicate)
+- Historical record preserved
+
+**State:**
+- `status = "cancelled"`
+- `enabled = true` or `false` (depends on how stopped)
+- Executions: Mix of `cancelled`, `completed`, `responded`, `failed`
+- `completed_at` timestamp set for cancelled executions
 
 **Actions Available:**
-- View statistics
+- View statistics (partial)
 - Duplicate campaign
 - Delete campaign
+- Cannot edit flow configuration
+- Cannot restart
 
-<Warning>
-  Cancelled campaigns cannot be resumed. If you need to continue, duplicate the campaign and launch the copy.
-</Warning>
+**Transitions:**
+- → (none): Cancelled campaigns cannot transition
+- Must duplicate to restart
 
-### Scheduled
-
-**When:** Campaign is set to start at a specific date and time
-
-**Characteristics:**
-- Waiting to start
-- Can be edited before start time
-- Will automatically become Active at scheduled time
-- Can be cancelled before starting
-
-**Actions Available:**
-- Edit campaign (before start time)
-- Cancel scheduled start
-- View schedule details
-
-<Note>
-  Screenshot placeholder: Add a screenshot showing a Scheduled campaign with schedule details
-</Note>
+**Stop Behavior:**
+- All active executions immediately cancelled
+- `error_message`: "Campaign stopped by user"
+- `completed_at` timestamp set
+- Progress lost (cannot resume)
 
 ### Tracking
 
-**When:** Campaign is monitoring responses but not actively sending
+**Note:** This status is deprecated. Response detection is now handled automatically by UnifiedWorker. Campaigns no longer use "tracking" status.
 
-**Characteristics:**
-- Monitoring for responses
-- May send follow-up messages based on conditions
-- In a monitoring state
-- Can be stopped
-
-**Actions Available:**
-- Stop campaign
-- View statistics
-- Edit campaign (if allowed)
+**Historical Context:**
+- Previously used for campaigns monitoring responses
+- Now handled automatically during `active` status
+- Response detection runs every 60 seconds for active campaigns
 
 ## Status Transitions
 
@@ -151,29 +227,146 @@ Campaigns in Reach have different statuses that indicate their current state. Un
 
 ```
 Draft → Scheduled → Active → Completed
-                ↓
-            Paused → Active → Completed
-                ↓
-            Cancelled
+         ↓
+      Active → Paused → Active → Completed
+         ↓
+      Cancelled
 ```
 
-### Status Change Rules
+### Transition Rules
 
 **To Active:**
-- From: Draft, Paused, Scheduled
-- Requires: Campaign enabled, Telegram account connected, contacts selected
+- **From:** `draft`, `paused`, `scheduled`
+- **Requires:**
+  - Campaign enabled (`enabled = true`)
+  - Telegram account connected and healthy
+  - At least one contact selected
+  - Valid flow configuration
+- **Process:**
+  - Status changes to `active`
+  - Executions created/resumed
+  - `next_execution_at` set to `now()`
+  - Worker picks up executions
 
 **To Paused:**
-- From: Active
-- Preserves: All progress and state
+- **From:** `active`
+- **Requires:**
+  - Campaign is active
+  - User has pause permissions
+- **Process:**
+  - Status changes to `paused`
+  - All active executions paused
+  - `next_execution_at` preserved
+  - Flow configuration unlocked for editing
 
 **To Cancelled:**
-- From: Active, Paused, Scheduled
-- Result: Stops all execution immediately
+- **From:** `active`, `paused`, `scheduled`
+- **Requires:**
+  - User has stop permissions
+- **Process:**
+  - Status changes to `cancelled`
+  - All active executions cancelled
+  - `completed_at` timestamp set
+  - Cannot be resumed
 
 **To Completed:**
-- From: Active
-- When: All contacts processed, all messages sent
+- **From:** `active`
+- **Requires:**
+  - All executions reached terminal status
+  - No pending/running/waiting executions
+- **Process:**
+  - Worker detects completion
+  - Status changes to `completed`
+  - Final statistics calculated
+  - Campaign locked (cannot restart)
+
+**To Scheduled:**
+- **From:** `draft`
+- **Requires:**
+  - `start_type = "scheduled"`
+  - `scheduled_start_at` set
+  - `timezone` set
+- **Process:**
+  - Status changes to `scheduled`
+  - Executions created with `next_execution_at = scheduled_start_at`
+  - Worker monitors for scheduled time
+
+## Status-Based Restrictions
+
+### Editing Restrictions
+
+**Can Edit Flow Configuration:**
+- `draft`: Always editable
+- `paused`: Editable (flow unlocked)
+- `scheduled`: Editable (before start time)
+
+**Cannot Edit Flow Configuration:**
+- `active`: Must pause first (prevents mid-execution changes)
+- `completed`: Cannot edit (historical record)
+- `cancelled`: Cannot edit (historical record)
+
+**Can Edit Basic Metadata (Always):**
+- Campaign name
+- Description
+- Telegram account
+- Timezone
+- A/B test settings (if not active)
+- Response handling settings
+
+### Permission Restrictions
+
+**View Permissions:**
+- Own campaigns: All roles can view
+- Other members' campaigns:
+  - Owner/Admin: Can view if `admin_view_enabled = true`
+  - Member: Cannot view
+
+**Edit Permissions:**
+- Own campaigns: All roles can edit (subject to status)
+- Other members' campaigns:
+  - Owner: Can edit (subject to status)
+  - Admin: Can edit (subject to status)
+  - Member: Cannot edit
+
+**Delete Permissions:**
+- Own campaigns: All roles can delete
+- Other members' campaigns:
+  - Owner: Can delete
+  - Admin: Can delete
+  - Member: Cannot delete
+
+## Enable vs Status
+
+### Enabled Campaigns
+
+**Characteristics:**
+- `enabled = true`
+- Can be launched
+- Can become `active`
+- Can execute normally
+
+**Behavior:**
+- Launch allowed (if status permits)
+- Workers process executions
+- Normal operation
+
+### Disabled Campaigns
+
+**Characteristics:**
+- `enabled = false`
+- Cannot be launched
+- Any active executions cancelled immediately
+- Status may show as "Disabled" regardless of other status
+
+**Behavior:**
+- Launch blocked (regardless of status)
+- Active executions cancelled on disable
+- Different from pause (cannot launch when disabled)
+
+**Use Cases:**
+- Emergency stop without deleting
+- Temporarily prevent launches
+- Disable problematic campaigns
 
 ## Status Indicators
 
@@ -187,112 +380,87 @@ Statuses are displayed with color-coded badges:
 - **Completed**: Blue/Primary
 - **Cancelled**: Red/Destructive
 - **Scheduled**: Orange
-- **Tracking**: Blue
-
-<Note>
-  Screenshot placeholder: Add a visual guide showing all status badges
-</Note>
 
 ### Status in Campaign List
 
 In the campaign list, status is shown:
 - As a badge next to the campaign name
-- With an enable/disable toggle
+- With an enable/disable toggle (separate from status)
 - In the status column (if table view)
-
-## Enable vs Status
-
-### Enabled Campaigns
-
-- Can be launched
-- Can become Active
-- Can execute normally
-
-### Disabled Campaigns
-
-- Cannot be launched
-- Any active executions are cancelled
-- Status may show as "Disabled" regardless of other status
-
-<Info>
-  Disabling a campaign is different from pausing. Disabled campaigns cannot be launched at all.
-</Info>
-
-## Status and Permissions
-
-### Editing Based on Status
-
-**Can Edit:**
-- Draft campaigns
-- Paused campaigns
-- Scheduled campaigns (before start time)
-
-**Cannot Edit:**
-- Active campaigns (must pause first)
-- Completed campaigns
-- Cancelled campaigns
-
-### Organization Permissions
-
-- **Own Campaigns**: Full control over status changes
-- **Other's Campaigns**: View only (unless admin/owner)
-- **Admin/Owner**: Can view all campaigns but editing depends on status
+- With progress indicators (for active campaigns)
 
 ## Troubleshooting Status Issues
 
 ### Campaign Stuck in Active
 
-If a campaign appears stuck in Active status:
+**Symptoms:**
+- Status shows `active` but no progress
+- Executions remain in `pending` or `running`
 
-1. Check if messages are actually being sent
-2. Review campaign statistics
-3. Check Telegram account health
-4. Try pausing and resuming
-5. Contact support if needed
+**Check:**
+1. Worker is running (check worker logs)
+2. Executions have valid `next_execution_at`
+3. Rate limits not blocking execution
+4. Telegram account is healthy
+
+**Solutions:**
+- Pause and resume campaign
+- Check worker logs for errors
+- Verify rate limit configuration
+- Restart worker if needed
 
 ### Cannot Change Status
 
-If you cannot change a campaign status:
+**Check:**
+1. You have permissions (must be creator or admin/owner)
+2. Campaign is enabled (for launch)
+3. Status allows transition (see transition rules)
+4. Requirements met (contacts, account, etc.)
 
-1. Verify you have permission (must be creator or admin/owner)
-2. Check if campaign is enabled
-3. Ensure Telegram account is connected
-4. Try refreshing the page
-5. Check for system notifications
+**Solutions:**
+- Verify your role and permissions
+- Check campaign requirements
+- Ensure status allows desired transition
+- Contact support if issue persists
 
 ### Status Not Updating
 
-If status doesn't update as expected:
+**Symptoms:**
+- Status doesn't reflect actual state
+- Transitions not happening automatically
 
-1. Refresh the page
-2. Check network connection
-3. Wait a few moments for status to sync
-4. Review campaign logs if available
-5. Contact support if issue persists
+**Check:**
+1. Worker is running (for auto-transitions)
+2. Database is updated correctly
+3. Cache is refreshed
+
+**Solutions:**
+- Refresh the page
+- Wait for worker cycle (30 seconds)
+- Check database directly (if admin)
+- Contact support if issue persists
+
+### Scheduled Campaign Not Starting
+
+**Check:**
+1. Scheduled time has passed
+2. Campaign timezone is correct
+3. Worker is running (checks every 30 seconds)
+4. Campaign is enabled
+
+**Solutions:**
+- Verify scheduled time and timezone
+- Check worker logs for errors
+- Ensure worker is running
+- Contact support if issue persists
 
 ## Best Practices
 
 1. **Monitor Status**: Regularly check campaign statuses
-2. **Use Pause**: Pause instead of stopping when you need to temporarily halt
+2. **Use Pause**: Pause instead of stop when temporarily halting
 3. **Plan Schedules**: Use scheduled status for planned campaigns
 4. **Track Completion**: Monitor campaigns approaching completion
 5. **Document Changes**: Note why status changes were made
-
-## Related Topics
-
-<Card
-  title="Managing Campaigns"
-  icon="settings"
-  href="/campaigns/managing-campaigns"
->
-  Learn how to manage campaigns and change statuses
-</Card>
-
-<Card
-  title="Creating Campaigns"
-  icon="plus"
-  href="/campaigns/creating-campaigns"
->
-  Understand how campaigns start in Draft status
-</Card>
-
+6. **Understand Transitions**: Know which transitions are allowed
+7. **Respect Restrictions**: Follow status-based edit restrictions
+8. **Check Permissions**: Verify role-based access before operations

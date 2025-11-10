@@ -1,233 +1,390 @@
 ---
 title: "Creating Campaigns"
-description: "Step-by-step guide to creating campaigns in Reach"
+description: "Complete guide to creating campaigns with flow builder, nodes, edges, and advanced features"
 ---
 
-## Creating a New Campaign
+## Campaign Creation Process
 
-To create a campaign, click the **"Create Campaign"** button from the campaigns page or use the quick action button in the sidebar.
+Campaigns are created through a visual flow builder that defines the messaging sequence. Each campaign consists of nodes (actions) connected by edges (flow paths).
 
-<Note>
-  Screenshot placeholder: Add a screenshot showing the "Create Campaign" button
-</Note>
+## Step 1: Basic Information
 
-## Campaign Creation Steps
+### Campaign Name
 
-### Step 1: Basic Information
+Required field that identifies the campaign:
+- Displayed in campaign list, statistics, and audit logs
+- Used for filtering and searching
+- Best practice: Use descriptive names like "Welcome Sequence - Q1 2024"
 
-#### Campaign Name
+### Description
 
-Enter a descriptive name for your campaign. This name will be displayed in:
-- Campaign list
-- Campaign statistics
-- Deal source tracking
-- Analytics reports
+Optional field for campaign documentation:
+- Visible to team members in organization mode
+- Useful for explaining campaign goals and strategy
+- Not used in processing logic
 
-**Best Practices:**
-- Use clear, descriptive names
-- Include date or version if needed
-- Make it easy to identify the campaign's purpose
+### Telegram Account
 
-#### Description
+**Required** - Select which Telegram account sends messages:
+- Must have at least one connected account
+- Account must be healthy and connected
+- Campaign cannot send without valid account
 
-Optionally add a description explaining:
-- Campaign goals
-- Target audience
-- Key messaging points
-- Notes for your team
-
-#### Telegram Account
-
-Select the Telegram account to use for sending messages. You must:
-- Have at least one connected Telegram account
-- Select an account from the dropdown
-- Ensure the account is healthy and connected
+**Account Selection:**
+- Dropdown shows all available accounts
+- Account health status displayed
+- Unhealthy accounts cannot be selected
 
 <Warning>
-  Campaigns cannot send messages without a selected Telegram account. Make sure your account is connected before creating the campaign.
+Campaigns cannot send messages if the Telegram account is disconnected or unhealthy. Ensure account is connected before creating campaign.
 </Warning>
 
-### Step 2: Build Your Flow
+## Step 2: Flow Builder
 
-The campaign flow builder is a visual interface for creating your messaging workflow.
+The flow builder is a visual interface for creating campaign workflows. It uses a node-based system where each node represents an action or decision point.
 
-<Note>
-  Screenshot placeholder: Add a screenshot of the flow builder interface
-</Note>
+### Start Node
 
-#### Start Node
+Every campaign begins with a START node that defines when execution begins.
 
-Every campaign begins with a Start Node that defines:
+**Start Type: Immediate**
+- Campaign starts as soon as it's launched
+- All executions begin processing immediately
+- `next_execution_at` set to `now()`
 
-**Start Type:**
-- **Immediate**: Campaign starts as soon as it's launched
-- **Scheduled**: Campaign starts at a specific date and time
+**Start Type: Scheduled**
+- Campaign starts at specific date/time
+- Requires `scheduled_start_at` (date + time)
+- Requires `timezone` (e.g., "America/Sao_Paulo")
+- Worker checks scheduled campaigns every 30 seconds
+- Automatically transitions to `active` when time reached
 
-**For Scheduled Campaigns:**
-- **Date**: Select the start date
-- **Time**: Select the start time
-- **Timezone**: Choose the timezone for the scheduled time
+**Timezone Handling:**
+- Scheduled time stored in UTC in database
+- Displayed in selected timezone in UI
+- Worker converts UTC to campaign timezone for comparison
+- Ensures campaigns start at correct local time
 
-<Info>
-  Scheduled times are converted to UTC for storage but displayed in your selected timezone.
-</Info>
+### Node Types
 
-#### Adding Nodes
+#### SEND_MESSAGE Node
 
-Click the **"+"** button or use the node palette to add:
+Sends a message to the lead.
 
-**Message Node:**
-- Text message content
-- Variable placeholders (e.g., {first_name})
-- Message formatting
+**Message Content:**
+- Plain text message
+- Supports dynamic tags and spintax
+- Optional media URL (image, video, document)
 
-**Delay Node:**
-- Wait time between messages
-- Delay duration (minutes, hours, days)
-- Conditional delays
+**Message Processing:**
+1. Spintax processed first (variations resolved deterministically)
+2. Tags replaced with actual values (with fallbacks)
+3. Rate limiting checked
+4. Message sent via Telegram API
+5. Execution log created
 
-**Condition Node:**
-- Conditional logic based on responses
-- Branch to different paths
-- Response matching rules
+**Dynamic Tags:**
+- `{firstName}`, `{lastName}`, `{username}`, `{phoneNumber}`, `{groupName}`
+- `{cf-fieldName}` for custom fields
+- `{tag|fallback}` for fallback values
 
-**End Node:**
-- Campaign completion point
-- Final actions
-- Completion tracking
+**Spintax:**
+- `{option1|option2|option3}` for message variations
+- Same lead always gets same variation (deterministic)
+- Supports nested spintax
 
-#### Connecting Nodes
+#### WAIT Node
 
-- Drag from node outputs to node inputs
-- Create sequential flows
-- Add conditional branches
-- Define flow paths
+Pauses execution for specified duration or until response.
 
-<Note>
-  Screenshot placeholder: Add a GIF showing how to connect nodes in the flow builder
-</Note>
+**Duration-Based Wait:**
+- Specify days, hours, minutes
+- Execution status: `waiting`
+- `next_execution_at` calculated: `now() + duration`
+- Worker resumes execution when time reached
 
-### Step 3: Configure Messages
+**Response-Based Wait:**
+- Waits for lead to reply
+- Configurable timeout (days/hours/minutes)
+- Execution status: `waiting`
+- If response detected: execution continues immediately
+- If timeout reached: execution continues to next node
+- If no timeout: waits indefinitely
 
-#### Message Content
+#### CONDITION Node
 
-For each Message Node, define:
+Branches flow based on evaluation result.
 
-**Message Text:**
-- Plain text messages
-- Variable placeholders
-- Emojis and special characters
+**Condition Types:**
+- Response check: Did lead reply?
+- Variable check: Does variable match value?
+- Custom condition: Evaluate expression
 
-**Variables:**
-- `{first_name}`: Lead's first name
-- `{last_name}`: Lead's last name
-- `{username}`: Telegram username
-- `{phone_number}`: Phone number
-- Custom field variables
+**Branching:**
+- Edges define paths: `condition: "yes"` or `condition: "no"`
+- Next node determined by condition result
+- If no matching edge: execution stops (error)
 
-<Info>
-  Variables are replaced with actual values when messages are sent. If a variable value is missing, it may be left blank or replaced with a default.
-</Info>
+**Edge Configuration:**
+- Source: Condition node ID
+- Target: Next node ID
+- Condition: `"yes"` or `"no"` (or custom value)
 
-#### Message Timing
+#### END Node
 
-Configure when messages are sent:
-- **Immediate**: Send right away
-- **Delayed**: Wait specified time after previous message
-- **Scheduled**: Send at specific time
+Marks execution as completed.
 
-### Step 4: Select Contacts
+**Completion Behavior:**
+- Execution status: `completed`
+- `completed_at` timestamp set
+- Campaign checks if all executions done
+- If all done: campaign status → `completed`
 
-Choose which contacts receive the campaign:
+### Adding Nodes
 
-**Options:**
-- **All Leads**: Send to all leads in your account
-- **Segment**: Send to a specific segment
-- **Manual Selection**: Select individual leads
-- **Custom Filter**: Use advanced filters
+**From Node Palette:**
+1. Click "+" button or node type icon
+2. Node added to flow canvas
+3. Auto-connected to previous node (if sequential)
+4. Configure node properties in sidebar
 
-<Note>
-  Screenshot placeholder: Add a screenshot showing contact selection options
-</Note>
+**Node Properties:**
+- Each node type has specific properties
+- SEND_MESSAGE: message text, media URL
+- WAIT: duration or response timeout
+- CONDITION: condition expression
+- Properties saved in node `data` field
 
-### Step 5: Review and Save
+### Connecting Nodes
 
-Before saving, review:
+**Sequential Connections:**
+- Nodes processed in array order by default
+- Edges created automatically for sequential flow
+- Manual edges only needed for condition branches
 
-- Campaign name and description
-- Flow configuration
-- Selected contacts
-- Telegram account
-- Start type and schedule
+**Conditional Branches:**
+- Drag edge from condition node to target node
+- Set edge `condition` to `"yes"` or `"no"`
+- Multiple edges from same condition node allowed
+- Each edge represents different branch path
 
-Click **"Save"** to create the campaign as a draft, or **"Save and Launch"** to create and immediately start the campaign.
+**Edge Properties:**
+- `source`: Source node ID
+- `target`: Target node ID
+- `condition`: Branch condition (for condition nodes)
+- `label`: Optional display label
 
-## Campaign Flow Examples
+### Flow Validation
+
+Before saving, flow is validated:
+
+**Required Checks:**
+- Must have START node
+- Must have at least one SEND_MESSAGE node
+- All nodes must be connected (directly or via edges)
+- Condition nodes must have edges for all branches
+
+**Warnings:**
+- Unconnected nodes
+- Condition nodes without branches
+- Empty message nodes
+- Invalid wait durations
+
+## Step 3: Advanced Features
+
+### A/B Testing
+
+Enable A/B testing to test multiple flow variations.
+
+**Configuration:**
+- Toggle `ab_test_enabled` to enable
+- Create variations (A, B, C, etc.)
+- Each variation has independent flow configuration
+- Variations can be enabled/disabled independently
+
+**Variation Selection:**
+- Deterministic: Same lead always gets same variation
+- Uses hash of `contact_id` as seed
+- Weighted distribution: Configure weights per variation
+- Default: Uniform distribution (equal weights)
+
+**Optimization:**
+- Automatic optimization based on performance
+- Compares response rates between variations
+- Adjusts weights to favor better performers
+- Threshold: `ab_test_optimization_threshold` (default: 0.1)
+
+**Statistics:**
+- Tracked per variation: sent, responses, response rate
+- Updated every 5 minutes
+- View via campaign statistics page
+
+### Response Handling
+
+**Pause on Response:**
+- `pause_on_response`: If `true`, execution stops immediately when response detected
+- If `false`, execution completes current node before stopping
+- Default: `false`
+
+**Response Timeout:**
+- `response_timeout_hours`: Maximum wait time for response
+- If no response after timeout, execution continues
+- Default: No timeout (waits indefinitely)
+- Only applies to response-based WAIT nodes
+
+### Timezone Configuration
+
+**Campaign Timezone:**
+- Required for scheduled campaigns
+- Used for converting scheduled time
+- Format: IANA timezone (e.g., "America/Sao_Paulo", "Europe/London")
+- Default: "UTC"
+
+**Timezone Impact:**
+- Scheduled start time displayed in campaign timezone
+- Worker converts to UTC for storage
+- Ensures campaigns start at correct local time
+
+## Step 4: Contact Selection
+
+### Adding Contacts
+
+Contacts can be added during creation or after:
+
+**During Creation:**
+- Select contacts from available list
+- Filter by segment, custom fields, etc.
+- Executions created immediately when campaign saved
+
+**After Creation:**
+- Add contacts via campaign detail page
+- Executions created with status `pending`
+- For active campaigns: executions processed immediately
+- For completed campaigns: campaign reactivated to `active`
+
+### Contact Filtering
+
+**Available Filters:**
+- Segment membership
+- Custom field values
+- Tags
+- Organization (in org mode)
+
+**Execution Creation:**
+- One execution per contact
+- Status: `pending`
+- `next_execution_at`: `now()` for immediate processing
+- Context initialized with contact data
+
+## Step 5: Save and Launch
+
+### Save as Draft
+
+**Draft Status:**
+- Campaign saved but not launched
+- Status: `draft`
+- Can be edited freely
+- No executions processed
+- Can launch later
+
+### Save and Launch
+
+**Launch Behavior:**
+- Status changes to `active` (or `scheduled` if scheduled)
+- Executions created for all selected contacts
+- `next_execution_at` set to `now()` (or scheduled time)
+- Worker picks up executions on next cycle
+
+**Launch Requirements:**
+- Campaign must be enabled (`enabled = true`)
+- Telegram account must be connected and healthy
+- At least one contact selected
+- Flow must be valid
+
+## Flow Examples
 
 ### Simple Sequence
 
-A basic campaign with sequential messages:
+```
+START → SEND_MESSAGE (Welcome) → WAIT (24 hours) → SEND_MESSAGE (Follow-up) → END
+```
 
-1. **Start Node** → Immediate start
-2. **Message Node** → Welcome message
-3. **Delay Node** → Wait 24 hours
-4. **Message Node** → Follow-up message
-5. **End Node** → Complete
+**Execution Flow:**
+1. START: Initialize execution
+2. SEND_MESSAGE: Send welcome message
+3. WAIT: Set `next_execution_at` to 24 hours later
+4. Worker resumes after 24 hours
+5. SEND_MESSAGE: Send follow-up message
+6. END: Mark execution completed
 
 ### Conditional Flow
 
-A campaign with conditional branching:
+```
+START → SEND_MESSAGE (Initial) → CONDITION (Response?) 
+  ├─ Yes → SEND_MESSAGE (Thank you) → END
+  └─ No → WAIT (48 hours) → SEND_MESSAGE (Reminder) → END
+```
 
-1. **Start Node** → Immediate start
-2. **Message Node** → Initial message
-3. **Condition Node** → Check for response
-   - **If Response**: Go to Response Path
-   - **If No Response**: Go to Follow-up Path
-4. **End Node** → Complete
+**Execution Flow:**
+1. START: Initialize execution
+2. SEND_MESSAGE: Send initial message
+3. CONDITION: Check for response
+4. If response: Branch to "Yes" path → Send thank you → END
+5. If no response: Branch to "No" path → Wait 48h → Send reminder → END
+
+**Edge Configuration:**
+- Edge 1: `source: condition_node_id`, `target: thank_you_node_id`, `condition: "yes"`
+- Edge 2: `source: condition_node_id`, `target: wait_node_id`, `condition: "no"`
 
 ### Scheduled Campaign
 
-A campaign that starts at a specific time:
+```
+START (Scheduled: 2024-01-15 09:00 America/Sao_Paulo) 
+  → SEND_MESSAGE (Announcement) → END
+```
 
-1. **Start Node** → Scheduled for specific date/time
-2. **Message Node** → Announcement message
-3. **End Node** → Complete
+**Execution Flow:**
+1. Campaign status: `scheduled`
+2. Worker checks every 30 seconds
+3. When scheduled time reached: Status → `active`
+4. Executions begin processing
+5. SEND_MESSAGE: Send announcement
+6. END: Mark execution completed
 
-## Tips for Creating Campaigns
+### A/B Test Campaign
 
-1. **Start Simple**: Begin with basic sequential campaigns before adding complexity
-2. **Test Flow**: Review your flow visually before saving
-3. **Use Variables**: Personalize messages with lead information
-4. **Add Delays**: Space out messages to avoid overwhelming recipients
-5. **Test First**: Create test campaigns with small audiences
-6. **Document**: Add descriptions explaining your campaign strategy
+```
+START → A/B SELECTION
+  ├─ Variation A: SEND_MESSAGE (Version A) → END
+  ├─ Variation B: SEND_MESSAGE (Version B) → END
+  └─ Variation C: SEND_MESSAGE (Version C) → END
+```
 
-## Common Mistakes to Avoid
+**Execution Flow:**
+1. START: Initialize execution
+2. A/B service selects variation based on `contact_id` hash
+3. Execution uses selected variation's flow
+4. Variation tracked in execution (`ab_variation` field)
+5. Statistics updated per variation
 
-1. **Missing Start Node**: Every campaign needs a Start Node
-2. **No Connections**: Ensure nodes are properly connected
-3. **Missing Account**: Don't forget to select a Telegram account
-4. **No Contacts**: Make sure contacts are selected
-5. **Invalid Schedule**: Check scheduled times are in the future
-6. **Complex Flows**: Start simple and add complexity gradually
+## Best Practices
 
-## Next Steps
+1. **Test Flow First**: Create draft, review flow visually, test with small audience
+2. **Use Descriptive Names**: Make campaigns easy to identify
+3. **Set Correct Timezone**: Ensure scheduled campaigns start at right time
+4. **Add Fallbacks**: Always provide fallback values for tags: `{firstName|Guest}`
+5. **Respect Rate Limits**: Space out messages with WAIT nodes
+6. **Monitor Responses**: Enable pause on response to stop when lead engages
+7. **Use A/B Testing**: Test variations to optimize performance
+8. **Document Strategy**: Use description field to explain campaign goals
 
-After creating your campaign:
+## Common Mistakes
 
-<Card
-  title="Managing Campaigns"
-  icon="settings"
-  href="/campaigns/managing-campaigns"
->
-  Learn how to manage, edit, and optimize your campaigns
-</Card>
-
-<Card
-  title="Campaign Statuses"
-  icon="info-circle"
-  href="/campaigns/campaign-statuses"
->
-  Understand different campaign statuses and when they apply
-</Card>
-
+1. **Missing START Node**: Every campaign needs START node
+2. **No Telegram Account**: Campaign cannot send without account
+3. **Invalid Timezone**: Scheduled campaigns need valid IANA timezone
+4. **No Contacts**: Campaign needs at least one contact
+5. **Condition Without Branches**: Condition nodes need edges for all paths
+6. **Circular References**: Avoid loops in flow (causes infinite execution)
+7. **Missing Fallbacks**: Tags without fallbacks may break messages
+8. **Too Aggressive Rate Limiting**: Sending too fast causes FloodWaitError
