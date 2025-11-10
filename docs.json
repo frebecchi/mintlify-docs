@@ -1,7 +1,6 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
   "name": "Reach Documentation",
+  "theme": "mint",
   "colors": {
     "primary": "#30aabc",
     "light": "#07C983",
