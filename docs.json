@@ -40,6 +40,8 @@
         "pages": [
           "leads/overview",
           "leads/managing-leads",
+          "leads/crawling",
+          "leads/crm-view",
           "leads/custom-fields"
         ]
       },

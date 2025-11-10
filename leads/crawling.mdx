@@ -1,0 +1,319 @@
+---
+title: "Group Crawling"
+description: "Extract leads from Telegram groups with intelligent rate limiting and caching"
+---
+
+## Overview
+
+Group crawling extracts member information from Telegram groups and channels, converting them into leads in your CRM. The system uses multiple crawling methods with intelligent rate limiting to safely extract leads while respecting Telegram API limits.
+
+## Crawling Methods
+
+The system automatically selects the best method based on availability and current rate limit usage. Methods are prioritized by reliability and data completeness.
+
+### Method 1: iter_participants (Primary)
+
+**Best for**: Most groups, highest reliability
+
+**How it works**:
+- Iterates through all group participants
+- Aggressive mode disabled for safety
+- Sleeps every 100 users (0.5-1.0 seconds)
+- Collects complete member information
+
+**Rate Limits**:
+- Maximum 50 groups per day per account
+- 90-150 seconds sleep between groups
+- Automatic rate limit tracking
+
+**Data Collected**:
+- Telegram User ID
+- Username (if public)
+- First Name, Last Name
+- Phone Number (if visible)
+
+### Method 2: get_participants_recent (Fallback)
+
+**Best for**: When iter_participants limit reached
+
+**How it works**:
+- Uses Telegram's GetParticipantsRequest with Recent filter
+- Returns recently active members
+- Single API call per group
+
+**Rate Limits**:
+- Maximum 50 groups per day per account
+- 90-150 seconds sleep between groups
+
+**Limitations**:
+- May not return all members (only recent)
+- Limited to 200 members per request
+
+### Method 3: get_messages (Alternative)
+
+**Best for**: Large groups, when participant methods unavailable
+
+**How it works**:
+- Extracts member information from message history
+- Analyzes message senders
+- Can process thousands of messages
+
+**Rate Limits**:
+- Maximum 1000 message fetches per day
+- Sleeps every 50 messages (0.5 seconds)
+
+**Limitations**:
+- Only finds members who have sent messages
+- May miss lurkers/inactive members
+- Requires message_limit parameter
+
+**Message Limit**:
+- Default: 1000 messages
+- Maximum: 10000 messages (may take longer)
+- Higher limits = more members found but slower
+
+### Method Selection Logic
+
+The system automatically chooses the best method:
+
+1. **Check iter_participants availability**: If under daily limit, use this method
+2. **Check get_messages availability**: If iter_participants unavailable, use message extraction
+3. **Fallback to get_participants_recent**: If other methods unavailable
+
+You can't manually select methods - the system optimizes for you.
+
+## Starting a Crawl
+
+### Prerequisites
+
+1. **Telegram Account**: Must have an authenticated Telegram account
+2. **Group Access**: Account must be member/admin of target groups
+3. **Rate Limit Availability**: Account must have remaining daily quota
+
+### Steps
+
+1. Navigate to **Leads** → **Crawling** tab
+2. Select Telegram account from dropdown
+3. Choose groups to crawl:
+   - **From Account**: Select from your account's groups
+   - **Manual Entry**: Enter group ID or username manually
+4. Set message limit (if using message extraction method)
+5. Click **"Start Crawling"**
+
+### Progress Tracking
+
+During crawling, you'll see:
+- **Progress Bar**: Percentage complete
+- **Current Status**: Which group is being processed
+- **Results**: Members found per group
+- **Errors**: Any groups that failed
+
+### Results
+
+After crawling completes:
+- **Member List**: All unique members found
+- **Group Information**: Group name and member count
+- **Selection**: Choose which members to save as leads
+- **Bulk Save**: Save selected members to CRM
+
+## Caching
+
+### Automatic Caching
+
+Results are cached for **24 hours** to avoid redundant API calls:
+
+- **Cache Key**: User ID + Account ID + Group ID + Method
+- **Cache Duration**: 24 hours from completion
+- **Cache Invalidation**: Automatic after 24 hours
+
+### Cache Benefits
+
+- **Faster Results**: Cached groups return immediately
+- **Rate Limit Savings**: No API calls for cached groups
+- **Cost Efficiency**: Reduces Telegram API usage
+
+### Cache Behavior
+
+- **Same Group, Same Account**: Uses cache if available
+- **Different Account**: New crawl required (different cache key)
+- **After 24 Hours**: Cache expires, new crawl performed
+
+## Rate Limiting
+
+### Per-Account Limits
+
+Each Telegram account has independent rate limits:
+
+- **iter_participants**: 50 groups/day
+- **get_participants_recent**: 50 groups/day
+- **get_messages**: 1000 fetches/day
+- **get_entity**: 2000/day (for group info)
+
+### Automatic Throttling
+
+The system automatically:
+- Tracks daily usage per account
+- Enforces sleep intervals between operations
+- Prevents exceeding Telegram limits
+- Queues operations if limits reached
+
+### Rate Limit Tracking
+
+- **Real-time**: Updated after each operation
+- **Per Method**: Separate tracking per crawling method
+- **Daily Reset**: Limits reset at midnight UTC
+
+### Best Practices
+
+1. **Spread Crawling**: Don't crawl all groups at once
+2. **Use Caching**: Re-crawl groups only when needed
+3. **Multiple Accounts**: Distribute crawling across accounts
+4. **Monitor Limits**: Check account status before large crawls
+
+## Saving Crawled Leads
+
+### Selection
+
+After crawling, you can:
+- **Select Individual**: Click checkboxes for specific members
+- **Select All**: Select all members from all groups
+- **Deselect All**: Clear all selections
+
+### Bulk Save
+
+1. Select members to save
+2. Click **"Save Selected Leads"**
+3. System processes in batches:
+   - Automatic deduplication
+   - Updates existing leads if duplicates found
+   - Creates new leads for unique members
+4. Review results:
+   - **Inserted**: New leads created
+   - **Updated**: Existing leads updated
+   - **Skipped**: Invalid or duplicate entries
+
+### Deduplication
+
+When saving crawled leads:
+- **Same telegram_user_id**: Updates existing lead
+- **Same username**: Updates existing lead
+- **Same phone_number**: Updates existing lead
+
+No duplicate leads are created.
+
+### Source Attribution
+
+Saved leads are marked with:
+- **Source**: `telegram_crawling` or `crawling`
+- **Group Name**: Name of the group where found
+- **Group ID**: Telegram group identifier
+
+## Crawling History
+
+View past crawling sessions:
+- **Date/Time**: When crawl was performed
+- **Account**: Which Telegram account was used
+- **Groups**: Groups that were crawled
+- **Members Found**: Total unique members extracted
+- **Status**: Completed, Failed, or In Progress
+
+## Troubleshooting
+
+### No Members Found
+
+**Possible Causes**:
+- Group is empty or has no members
+- Account doesn't have access to group
+- Group is private and account isn't member
+- Rate limit reached (check account status)
+
+**Solutions**:
+- Verify account is member/admin of group
+- Check group privacy settings
+- Try different crawling method
+- Wait for rate limits to reset
+
+### Crawling Fails
+
+**Possible Causes**:
+- Rate limit exceeded
+- Account session expired
+- Group no longer accessible
+- Network issues
+
+**Solutions**:
+- Check account authentication status
+- Verify group still exists and is accessible
+- Wait for rate limits to reset
+- Try again later
+
+### Incomplete Results
+
+**Possible Causes**:
+- Using message extraction method (only finds active members)
+- Rate limit reached mid-crawl
+- Group has restricted member list access
+
+**Solutions**:
+- Use iter_participants method if available
+- Increase message_limit for message extraction
+- Ensure account has admin rights for better access
+- Re-crawl group when rate limits reset
+
+### Rate Limit Reached
+
+**Symptoms**:
+- Crawling stops with rate limit error
+- Some groups fail to crawl
+
+**Solutions**:
+- Wait 24 hours for limits to reset
+- Use different Telegram account
+- Reduce number of groups per crawl
+- Use cached results when available
+
+## Advanced Usage
+
+### Manual Group Entry
+
+For groups not in your account list:
+- Enter group ID (numeric) or username (with or without @)
+- System will attempt to access group
+- Requires account to be member/admin
+
+### Multiple Accounts
+
+Distribute crawling across accounts:
+- Each account has independent rate limits
+- Can crawl more groups by using multiple accounts
+- Results are combined when saving leads
+
+### Organization Context
+
+In organization mode:
+- Crawled leads are assigned to organization
+- All organization members can view crawled leads
+- Crawling history is visible to all members
+
+## Performance
+
+### Typical Performance
+
+- **Small Groups** (<100 members): 5-10 seconds
+- **Medium Groups** (100-1000 members): 30-60 seconds
+- **Large Groups** (>1000 members): 2-5 minutes
+
+### Factors Affecting Speed
+
+- **Group Size**: More members = longer crawl
+- **Method Used**: iter_participants slower but more complete
+- **Rate Limiting**: Sleep intervals add time
+- **Network**: Telegram API response time
+
+### Optimization Tips
+
+1. **Use Caching**: Re-crawl only when needed
+2. **Batch Groups**: Crawl multiple groups in one session
+3. **Selective Saving**: Only save relevant members
+4. **Off-Peak Times**: Crawl during low-traffic periods
+

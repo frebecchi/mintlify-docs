@@ -1,0 +1,449 @@
+---
+title: "CRM View & Lead Details"
+description: "Understanding the lead detail page, activities, intelligence, and messaging"
+---
+
+## Lead Detail Page
+
+The lead detail page provides a comprehensive CRM view with three main sections: sidebar information, main content tabs, and right sidebar with related data.
+
+### Layout
+
+**Left Sidebar** (Fixed Width):
+- Lead profile and contact information
+- Status and priority controls
+- Tags management
+- Custom fields
+- Quick actions
+
+**Main Content Area** (Tabs):
+- **Intelligence**: AI-generated storyline and metrics
+- **Activities**: Timeline of all interactions
+- **Messages**: Telegram conversation history
+
+**Right Sidebar** (Fixed Width):
+- Associated deals
+- Campaign participation
+- Segment membership
+- Related information
+
+## Left Sidebar
+
+### Profile Section
+
+Displays lead's basic information:
+- **Profile Picture**: Fetched from Telegram (if available)
+- **Name**: First name and last name
+- **Username**: Telegram @username with link
+- **Phone Number**: Formatted phone number
+- **Telegram User ID**: Unique identifier
+
+### Status & Priority
+
+**Status Dropdown**:
+- **Active**: Can receive messages
+- **Blocked**: Cannot receive messages
+- **Archived**: Inactive
+
+**Priority Dropdown**:
+- **High**: Important leads
+- **Medium**: Standard
+- **Low**: Lower priority
+
+Changes are saved automatically and logged in activities.
+
+### Tags
+
+- **View Tags**: All assigned tags displayed as badges
+- **Add Tags**: Type to create new or select existing
+- **Remove Tags**: Click X on tag badge
+- **Tag Colors**: Visual organization
+
+### Custom Fields
+
+All custom fields for leads are displayed here:
+- **Field Label**: User-friendly name
+- **Field Value**: Current value
+- **Edit**: Click to modify (if field allows)
+
+Custom fields are organization-wide - all members see the same fields.
+
+### Quick Actions
+
+- **Edit Lead**: Open edit modal
+- **Delete Lead**: Permanent deletion (requires confirmation)
+- **View in Telegram**: Open Telegram chat (if available)
+
+## Intelligence Tab
+
+The Intelligence tab provides AI-powered insights and relationship metrics.
+
+### AI Storyline
+
+**What it is**:
+An AI-generated summary that synthesizes:
+- Lead creation and entry point
+- Campaign participation history
+- Message exchanges (from fetched conversations)
+- Deal progression and status
+- Current relationship state
+
+**Structure**:
+1. **Interaction Snapshot**: Key metrics in bullet points
+   - Last interaction date and content
+   - Responsiveness level
+   - Key pain points mentioned
+   - Current intent
+   - Recommended next actions
+
+2. **Storyline**: 1-2 paragraph narrative connecting:
+   - How lead entered CRM
+   - Campaign touchpoints
+   - Relevant message quotes
+   - Current opportunity status
+   - What triggered interest
+
+3. **Sales Actions**: 3-5 actionable items:
+   - Specific follow-up tasks
+   - Pain point addresses
+   - Feature highlights
+   - Call/meeting suggestions
+
+**Generating Storyline**:
+1. Click **"Generate Storyline"** button
+2. System fetches latest messages (if conversation exists)
+3. AI analyzes all available data
+4. Storyline generated and saved
+5. Can regenerate to update with new information
+
+**Storyline History**:
+- All generated storylines are saved
+- View previous versions
+- Compare changes over time
+- Delete old versions (Owner/Admin only)
+
+**Permissions**:
+- **View**: All organization members can view
+- **Generate**: All members can generate
+- **Delete**: Only Owner/Admin can delete storylines
+
+**Data Sources**:
+- Campaign participation (from organization campaigns)
+- Messages sent/received (from organization campaigns)
+- Deals created (from organization deals)
+- Telegram conversations (only if fetched to system)
+- Lead metadata and custom fields
+
+**Limitations**:
+- Only includes messages that have been fetched to the system
+- Campaign messages are included automatically
+- Direct Telegram conversations require manual fetch
+- AI has access to all organization data for context
+
+### Metrics Dashboard
+
+**Campaign Metrics**:
+- **Campaigns Participated**: Number of campaigns lead joined
+- **Messages Sent**: Total campaign messages sent to lead
+- **Messages Received**: Total responses from lead
+- **Response Rate**: Percentage of sent messages that received responses
+- **Average Response Time**: Hours between sent message and response
+
+**Deal Metrics**:
+- **Active Deals**: Currently open deals
+- **Completed Deals**: Won or lost deals
+- **Total Deal Value**: Sum of all deal values
+- **Is Customer**: Has at least one won deal
+- **Deal Since**: Date of first deal creation
+
+**Relationship Timeline**:
+- **Lead Since**: When lead was created in CRM
+- **Last Response Date**: Most recent message from lead
+- **Primary Owner**: Team member with most interactions (scored by campaigns, messages, deals)
+
+**Collaborator Interactions**:
+Shows which team members have interacted with lead:
+- Campaigns they created/sent
+- Messages sent count
+- Deals created count
+- Email addresses for contact
+
+## Activities Tab
+
+The Activities tab shows a chronological timeline of all interactions and changes related to the lead.
+
+### Activity Types
+
+**Campaign Participation**:
+- Lead added to campaign
+- Campaign messages sent
+- Campaign responses received
+- Campaign status changes
+
+**Message Activity**:
+- Messages sent via campaigns
+- Responses received
+- Message delivery status
+
+**Lead Updates**:
+- Field changes (status, priority, tags, custom fields)
+- Who made the change
+- Old and new values
+
+**Deal Activity**:
+- Deal created
+- Deal updated (status, value, stage)
+- Deal won/lost
+
+**Storyline Generation**:
+- When storyline was generated
+- Who generated it
+
+**Audit Logs**:
+- System events
+- Important status changes
+
+### Filtering Activities
+
+**Search**:
+- Search across activity titles, descriptions, campaign names
+- Real-time filtering as you type
+
+**Type Filter**:
+- Filter by activity type (campaign, message, update, deal, etc.)
+- Shows only relevant activity types
+
+**User Filter**:
+- Filter by team member who performed action
+- Useful in organizations to see individual contributions
+
+### Activity Details
+
+Each activity shows:
+- **Icon**: Visual indicator of activity type
+- **Title**: Brief description of what happened
+- **Description**: Detailed information
+- **Campaign**: Associated campaign name (if applicable)
+- **Timestamp**: When activity occurred
+- **User**: Who performed the action (email)
+
+Activities are grouped by date (month/year) for easy navigation.
+
+## Messages Tab
+
+The Messages tab displays Telegram conversation history with the lead.
+
+### Conversation Access
+
+**Important**: Messages are **private** to the account owner:
+- Only you can view messages from your Telegram accounts
+- Other organization members cannot see your conversations
+- AI Storyline has limited access (only fetched messages)
+
+**Fetching Messages**:
+1. Click **"Fetch from Telegram"** button
+2. System retrieves conversation from Telegram API
+3. Messages saved to database
+4. Conversation appears in Messages tab
+
+**Multiple Accounts**:
+- If lead has conversations with multiple accounts, select account from dropdown
+- Each account's conversation is separate
+- Switch between accounts to view different conversations
+
+### Message Display
+
+**Message Bubbles**:
+- **Sent Messages**: Right-aligned, primary color
+- **Received Messages**: Left-aligned, muted color
+- **Telegram-style**: Rounded corners, message grouping
+- **Avatars**: Shown on last message of group
+
+**Message Grouping**:
+- Messages from same sender within 5 minutes are grouped
+- Reduces visual clutter
+- Avatar shown only on last message in group
+
+**Message Status** (Sent messages only):
+- **Sent**: Message sent to Telegram
+- **Delivered**: Message delivered to recipient
+- **Read**: Message read by recipient (if read receipts enabled)
+
+**Timestamps**:
+- **Time**: Hour:minute format
+- **Date Separators**: "Today", "Yesterday", or date
+- **Grouped**: Same-day messages grouped together
+
+### Sending Messages
+
+**Requirements**:
+- Lead must have `telegram_user_id` (required for messaging)
+- Account must be authenticated and active
+- Conversation must exist (or will be created)
+
+**Steps**:
+1. Type message in input box at bottom
+2. Press **Enter** to send (Shift+Enter for new line)
+3. Message appears immediately (optimistic update)
+4. Confirmed when Telegram API responds
+
+**Message Features**:
+- **Auto-resize**: Textarea grows with content (max 200px height)
+- **Enter to Send**: Standard Telegram behavior
+- **Shift+Enter**: New line
+- **Character Limit**: Telegram's message limit applies
+
+### Polling for New Messages
+
+**Automatic Polling**:
+- Polls every 30 seconds when tab is active
+- Only polls if conversation has been fetched
+- Stops when tab is inactive or page is hidden
+- Efficient: Only fetches messages newer than last known message
+
+**Manual Refresh**:
+- Click **"Fetch from Telegram"** anytime
+- Fetches all new messages since last fetch
+- Updates conversation immediately
+
+**Polling Behavior**:
+- Starts after first manual fetch
+- Continues while Messages tab is active
+- Stops when switching tabs or hiding page
+- Resumes when tab becomes active again
+
+### Search Messages
+
+**Search Functionality**:
+- Click **"Search"** button to open search box
+- Search across all message text
+- Highlights matching text in messages
+- Shows count of matching messages
+
+**Search Results**:
+- Filtered messages displayed
+- Matching text highlighted
+- Scroll to find matches
+
+### Conversation Management
+
+**Delete Conversation**:
+- Click settings icon (gear)
+- Select **"Delete Conversation History"**
+- Confirms deletion
+- **Warning**: Permanently deletes all messages from database
+- Messages can be re-fetched from Telegram if needed
+
+**Account Selection**:
+- If multiple accounts have conversations, select from dropdown
+- Shows message count per account
+- Switch to view different conversations
+
+## Right Sidebar
+
+### Associated Deals
+
+Shows all deals linked to this lead:
+- **Deal Name**: Deal title
+- **Value**: Deal amount
+- **Stage**: Current pipeline stage
+- **Status**: Active, Won, Lost
+- **Created Date**: When deal was created
+
+**Actions**:
+- Click deal to open deal detail page
+- Create new deal for this lead
+
+### Campaign Participation
+
+Lists all campaigns lead has participated in:
+- **Campaign Name**: Campaign title
+- **Status**: Campaign status
+- **Messages Sent**: Count of messages sent
+- **Last Activity**: Most recent interaction date
+
+**Actions**:
+- Click campaign to view details
+- See campaign performance for this lead
+
+### Segment Membership
+
+Shows segments this lead belongs to:
+- **Segment Name**: Segment title
+- **Auto-updated**: Segments update automatically based on rules
+
+**Note**: Lead automatically joins/leaves segments based on matching rules.
+
+## Permissions
+
+### View Permissions
+
+**Lead Detail Page**:
+- **Own Leads**: Creator can always view
+- **Organization Leads**: All members can view if lead belongs to organization
+- **Access Denied**: If lead doesn't belong to organization or user
+
+**Intelligence Tab**:
+- All organization members can view
+- Includes data from all organization campaigns/deals
+- AI Storyline visible to all members
+
+**Activities Tab**:
+- All organization members can view
+- Shows activities from all organization members
+- Filter by user to see individual contributions
+
+**Messages Tab**:
+- **Private**: Only account owner can view their own conversations
+- Other members cannot see your Telegram conversations
+- AI Storyline includes fetched messages (limited context)
+
+### Edit Permissions
+
+**Lead Information** (Sidebar):
+- **Own Leads**: Creator can edit
+- **Organization Leads**: Any organization member can edit
+- Changes logged in activities
+
+**Status & Priority**:
+- Any organization member can change
+- Changes visible to all members
+
+**Tags**:
+- Any organization member can add/remove
+- Shared across organization
+
+**Custom Fields**:
+- Any organization member can edit values
+- Field definitions managed by Owner/Admin
+
+**Storyline**:
+- Any member can generate
+- Only Owner/Admin can delete storylines
+
+**Messages**:
+- Only account owner can send messages
+- Only account owner can delete conversation
+- Other members cannot access
+
+### Delete Permissions
+
+**Lead Deletion**:
+- **Creator**: Can delete own leads
+- **Owner/Admin**: Can delete any organization lead
+- **Members**: Cannot delete leads
+
+**Conversation Deletion**:
+- Only account owner can delete their own conversations
+- Other members cannot delete conversations
+
+## Best Practices
+
+1. **Keep Storyline Updated**: Regenerate when significant interactions occur
+2. **Monitor Activities**: Check activity timeline regularly for insights
+3. **Fetch Messages**: Regularly fetch conversations for complete context
+4. **Use Tags**: Organize leads with meaningful tags
+5. **Update Custom Fields**: Keep business-specific data current
+6. **Track Deals**: Link deals to leads for relationship tracking
+7. **Review Collaborators**: Check who else is working with lead
+

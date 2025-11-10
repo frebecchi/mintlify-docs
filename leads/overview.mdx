@@ -1,258 +1,132 @@
 ---
 title: "Leads Overview"
-description: "Understanding leads and how to manage them in Reach"
+description: "Understanding leads and contact management in Reach"
 ---
 
 ## What are Leads?
 
-Leads are contacts in your Reach system - people you can send messages to through campaigns. Leads contain contact information, custom fields, and interaction history.
+Leads are contacts in your Reach CRM - people you can communicate with through Telegram campaigns. Each lead represents a potential customer or contact with associated information, interaction history, and relationship data.
 
-<Note>
-  Screenshot placeholder: Add a screenshot of the leads list page
-</Note>
+Leads are the foundation of your outreach strategy. They can be added manually, imported from files, extracted from Telegram groups, or automatically created when they interact with your campaigns.
 
-## Lead Information
+## Core Lead Information
 
-### Basic Information
+### Identifiers
 
-Each lead contains:
+Every lead requires at least one identifier to enable Telegram communication:
 
-- **First Name**: Contact's first name
-- **Last Name**: Contact's last name
-- **Username**: Telegram username (if available)
-- **Phone Number**: Contact's phone number
-- **Country**: Country code/location
-- **Language**: Preferred language
+- **Telegram User ID**: Unique numeric identifier (most reliable, works even without username/phone)
+- **Username**: Telegram @username (optional, can change)
+- **Phone Number**: Contact's phone number (optional, may be private)
 
-### Additional Data
+### Contact Details
 
-- **Source**: Where the lead came from (campaign, manual import, etc.)
-- **Status**: Lead status (active, blocked, etc.)
-- **Priority**: Priority level for the lead
-- **Tags**: Custom tags for organization
-- **Custom Fields**: Additional fields you define
-- **Campaign History**: Campaigns the lead participated in
-- **Response History**: Messages and responses
+- **First Name** / **Last Name**: Display names
+- **Country**: Country code for localization
+- **Language**: Preferred language for messaging
+- **Profile Picture**: Automatically fetched from Telegram when available
+
+### Metadata
+
+- **Source**: Origin of the lead (manual, crawling, file_upload, campaign, etc.)
+- **Status**: `active`, `blocked`, or `archived`
+- **Priority**: `high`, `medium`, or `low` for prioritization
+- **Group Name**: Telegram group/channel where lead was found
+- **Tags**: Custom labels for organization
+- **Custom Fields**: Additional structured data you define
 
 ## Lead Sources
 
-Leads can come from various sources:
+### Manual Entry
 
-### Campaign Sources
+Add leads individually through the interface. Requires at least username or phone number. Supports deduplication - if a lead with the same identifier exists, it's updated instead of creating a duplicate.
 
-- Leads added through campaign participation
-- Automatically tracked when campaigns run
-- Linked to specific campaigns
+### File Import (CSV/Excel)
 
-### Manual Import
+Bulk import leads from CSV or Excel files. The system processes files in batches for performance (200-500 contacts/second). Automatic deduplication ensures no duplicates are created.
 
-- Imported via CSV file
-- Manually added through the interface
-- Bulk import from external sources
+**Required columns**: `first_name`, `last_name`, `username`, `phone_number`
 
-### API Integration
+**Optional columns**: `country`, `language`, plus any custom field names
 
-- Added via API calls
-- Integrated from other systems
-- Automated lead capture
+### Group Crawling
 
-### Other Sources
+Extract leads from Telegram groups and channels using multiple crawling methods. The system intelligently selects the best method based on rate limits and availability. Results are cached for 24 hours to avoid redundant API calls.
 
-- Direct additions
-- Form submissions
-- Other integrations
+See the [Crawling Guide](/leads/crawling) for detailed information on methods, rate limits, and best practices.
 
-<Info>
-  Understanding lead sources helps you track where your best leads come from and optimize your lead generation strategy.
-</Info>
+### Campaign Interactions
+
+Leads are automatically created when:
+- They receive campaign messages
+- They respond to campaigns
+- They interact with your Telegram accounts
 
 ## Lead Statuses
 
 ### Active
 
-Leads that are:
-- Available for campaigns
-- Not blocked
-- Can receive messages
-- Ready for outreach
+Default status for all new leads. Active leads:
+- Can receive campaign messages
+- Are included in segment matching
+- Appear in campaign contact selection
+- Count toward your lead statistics
 
 ### Blocked
 
-Leads who have:
-- Blocked your Telegram account
-- Cannot receive messages
-- May need re-engagement
-- Should be handled carefully
-
-<Warning>
-  High blocking rates may indicate issues with your messaging strategy or rate limits.
-</Warning>
+Leads who have blocked your Telegram account. Blocked leads:
+- Cannot receive messages (Telegram API restriction)
+- Are automatically excluded from campaigns
+- May indicate messaging strategy issues if rate is high
+- Can be manually changed back to active if unblocked
 
 ### Archived
 
-Leads that are:
-- No longer active
-- Archived for organization
-- Not included in campaigns
-- Can be restored if needed
+Leads that are no longer actively managed. Archived leads:
+- Are excluded from campaigns and segments
+- Preserve all historical data
+- Can be restored to active status
+- Useful for organizing inactive contacts
 
-## Lead Management
+## Organization Context
 
-### Viewing Leads
+### Personal Workspace
 
-The leads page displays all leads in a table showing:
-- Contact information
-- Status and priority
-- Source information
-- Tags and custom fields
-- Last contact date
-- Actions menu
+When not in an organization, leads belong to you exclusively. Only you can view and edit your leads.
 
-### Searching Leads
+### Organization Mode
 
-Search leads by:
-- Name (first or last)
-- Username
-- Phone number
-- Email (if custom field)
-- Tags
-- Custom field values
+When in an organization, leads can be shared across team members:
 
-### Filtering Leads
+**View Permissions:**
+- **Own Leads**: All members can view their own leads (default view)
+- **All Leads**: Owners and Admins can view all organization leads
+- **Members**: Can view all leads if organization settings allow
 
-Filter leads by:
-- **Status**: Active, Blocked, Archived
-- **Source**: Campaign, Manual, API, etc.
-- **Priority**: High, Medium, Low
-- **Tags**: Specific tags
-- **Country**: Country code
-- **Language**: Language preference
-- **Custom Fields**: Field values
+**Edit Permissions:**
+- **Own Leads**: Full edit access for creator
+- **Organization Leads**: Any organization member can edit any lead in the organization
+- **Deletion**: Only creator or Owner/Admin can delete leads
 
-### Sorting Leads
+**Data Isolation:**
+- Leads are scoped to the organization
+- Switching organizations shows different lead sets
+- Personal workspace leads are separate from organization leads
 
-Sort leads by:
-- Name (alphabetical)
-- Created date
-- Last contact date
-- Status
-- Priority
-- Source
+## Deduplication
 
-## Lead Actions
+The system automatically prevents duplicate leads using intelligent matching:
 
-### Edit Lead
+1. **Primary Match**: Same `telegram_user_id` (most reliable)
+2. **Secondary Match**: Same `username` (case-insensitive)
+3. **Tertiary Match**: Same `phone_number` (normalized)
 
-Modify lead information:
-- Update contact details
-- Change status and priority
-- Add or remove tags
-- Update custom fields
-- Edit source information
+When a duplicate is detected:
+- Existing lead is updated with new information
+- Historical data (campaigns, messages, deals) is preserved
+- No duplicate records are created
 
-### View Details
-
-View comprehensive lead information:
-- Full contact details
-- Campaign participation history
-- Message and response history
-- Custom field values
-- Interaction timeline
-
-### Delete Lead
-
-Permanently remove a lead:
-- Deletes lead and all associated data
-- Cannot be undone
-- Removes from all segments
-- Removes campaign history
-
-<Warning>
-  Deleting a lead permanently removes all associated data. Consider archiving instead if you may need the information later.
-</Warning>
-
-## Custom Fields
-
-Leads support custom fields for additional information:
-
-### Field Types
-
-- **Text**: Single-line text
-- **Textarea**: Multi-line text
-- **Number**: Numeric values
-- **Date**: Date values
-- **Dropdown**: Predefined options
-- **Multiselect**: Multiple selections
-- **Boolean**: Yes/No values
-- **Email**: Email addresses
-- **Phone**: Phone numbers
-- **URL**: Web addresses
-
-### Using Custom Fields
-
-- Add custom fields in Settings
-- Assign values to leads
-- Filter and search by custom fields
-- Use in segment rules
-- Display in lead lists
-
-<Card
-  title="Custom Fields"
-  icon="settings"
-  href="/leads/custom-fields"
->
-  Learn how to create and manage custom fields for leads
-</Card>
-
-## Lead Segments
-
-Leads can be organized into segments:
-
-### What are Segments?
-
-Segments are dynamic lists of leads based on rules and conditions. Leads automatically join or leave segments based on matching rules.
-
-### Segment Benefits
-
-- **Targeted Campaigns**: Send campaigns to specific segments
-- **Organization**: Organize leads by characteristics
-- **Automation**: Automatic lead categorization
-- **Analysis**: Analyze lead groups
-
-<Card
-  title="Segments"
-  icon="target"
-  href="/segments/overview"
->
-  Learn how to create and use segments
-</Card>
-
-## Organization View
-
-### My Leads
-
-View only leads you created or imported. This is the default view.
-
-### All Organization Leads
-
-View leads from all organization members. Available to:
-- Organization owners
-- Organization admins
-
-**Features:**
-- See all organization leads
-- Filter by creator
-- View organization-wide statistics
-- Note: Editing permissions depend on lead ownership
-
-## Best Practices
-
-1. **Keep Data Clean**: Regularly update lead information
-2. **Use Tags**: Organize leads with meaningful tags
-3. **Custom Fields**: Add relevant custom fields for your use case
-4. **Segment**: Create segments for targeted campaigns
-5. **Monitor Status**: Track blocked leads and adjust strategy
-6. **Document**: Add notes and custom fields for context
+This applies to all lead creation methods: manual entry, file upload, crawling, and campaign interactions.
 
 ## Next Steps
 
@@ -261,14 +135,21 @@ View leads from all organization members. Available to:
   icon="users"
   href="/leads/managing-leads"
 >
-  Learn how to add, edit, and organize leads
+  Learn how to add, search, filter, and organize leads
 </Card>
 
 <Card
-  title="Custom Fields"
-  icon="settings"
-  href="/leads/custom-fields"
+  title="Group Crawling"
+  icon="database"
+  href="/leads/crawling"
 >
-  Set up custom fields to track additional lead information
+  Extract leads from Telegram groups with intelligent rate limiting
 </Card>
 
+<Card
+  title="CRM View"
+  icon="briefcase"
+  href="/leads/crm-view"
+>
+  Understand the lead detail page, activities, intelligence, and messaging
+</Card>
